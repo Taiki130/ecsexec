@@ -54,7 +54,7 @@ func main() {
 	}
 
 	if *service == "" {
-		serviceVar, err := selectService(client) 
+		serviceVar, err := selectService(client, *cluster)
 		if err != nil {
 			log.Fatalf("Faild to retrieve service name: %w", err)
 		}
@@ -67,7 +67,7 @@ func main() {
 	}
 
 	if *container == "" {
-		containerVar, err := selectContainer(client, *cluster)
+		containerVar, err := selectContainer(client, *cluster, taskID)
 		if err != nil {
 			log.Fatalf("Faild to retrieve container name: %w", err)
 		}
@@ -118,7 +118,7 @@ func selectCluster(client *ecs.Client) (string, error) {
 	return result, nil
 }
 
-func selectService(client *ecs.Client, service string) (string, error) {
+func selectService(client *ecs.Client, cluster string) (string, error) {
 	l := "Select service"
 	resp, err := client.ListServices(context.TODO(), &ecs.ListServicesInput{
 		Cluster: aws.String(cluster),
@@ -131,9 +131,9 @@ func selectService(client *ecs.Client, service string) (string, error) {
 		return "", errors.New("No ECS task found.")
 	}
 	var i []string
-	for arn := range serviceArns {
-		serviceName := strings.Split(serviceName, "/")[2]
-		i := append(i, serviceName)
+	for _, arn := range serviceArns {
+		serviceName := strings.Split(arn, "/")[2]
+		i = append(i, serviceName)
 	}
 	prompt := promptui.Select{
 		Label: l,
@@ -146,9 +146,25 @@ func selectService(client *ecs.Client, service string) (string, error) {
 	return result, nil
 }
 
-func selectContainer(client *ecs.Client, cluster string) (string, error) {
+func selectContainer(client *ecs.Client, cluster, taskID string) (string, error) {
 	l := "Select container"
-	resp, err := 
+	resp, err := client.DescribeTasks(context.TODO(), &ecs.DescribeTasksInput{
+		Cluster: aws.String(cluster),
+		Tasks:   []string{taskID},
+	})
+	if err != nil {
+		return "", err
+	}
+	i := resp.Tasks[0].Containers
+	prompt := promptui.Select{
+		Label: l,
+		Items: i,
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		return "", err
+	}
+	return result, err
 }
 
 func getTaskID(client *ecs.Client, cluster, service string) (string, error) {
