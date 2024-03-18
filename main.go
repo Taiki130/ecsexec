@@ -46,12 +46,32 @@ func main() {
 	client := ecs.NewFromConfig(cfg)
 
 	if *cluster == "" {
-		selectCluster(client)
+		clusterVar, err := selectCluster(client)
+		if err != nil {
+			log.Fatalf("Faild to retrieve cluster name: %w", err)
+		}
+		*cluster = clusterVar
+	}
+
+	if *service == "" {
+		serviceVar, err := selectService(client) 
+		if err != nil {
+			log.Fatalf("Faild to retrieve service name: %w", err)
+		}
+		*service = serviceVar
 	}
 
 	taskID, err := getTaskID(client, *cluster, *service)
 	if err != nil {
 		log.Fatalf("Failed to retrieve task ID: %w", err)
+	}
+
+	if *container == "" {
+		containerVar, err := selectContainer(client, *cluster)
+		if err != nil {
+			log.Fatalf("Faild to retrieve container name: %w", err)
+		}
+		*container = containerVar
 	}
 
 	runtimeID, err := getRuntimeID(client, taskID, *cluster, *container)
@@ -84,7 +104,8 @@ func selectCluster(client *ecs.Client) (string, error) {
 	}
 	var i []string
 	for _, arn := range clusterArns {
-		i = append(i, strings.Split(arn, "/")[1])
+		clusterName := strings.Split(arn, "/")[1]
+		i = append(i, clusterName)
 	}
 	prompt := promptui.Select{
 		Label: l,
@@ -95,6 +116,39 @@ func selectCluster(client *ecs.Client) (string, error) {
 		return "", err
 	}
 	return result, nil
+}
+
+func selectService(client *ecs.Client, service string) (string, error) {
+	l := "Select service"
+	resp, err := client.ListServices(context.TODO(), &ecs.ListServicesInput{
+		Cluster: aws.String(cluster),
+	})
+	if err != nil {
+		return "", err
+	}
+	serviceArns := resp.ServiceArns
+	if len(serviceArns) == 0 {
+		return "", errors.New("No ECS task found.")
+	}
+	var i []string
+	for arn := range serviceArns {
+		serviceName := strings.Split(serviceName, "/")[2]
+		i := append(i, serviceName)
+	}
+	prompt := promptui.Select{
+		Label: l,
+		Items: i,
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		return "", err
+	}
+	return result, nil
+}
+
+func selectContainer(client *ecs.Client, cluster string) (string, error) {
+	l := "Select container"
+	resp, err := 
 }
 
 func getTaskID(client *ecs.Client, cluster, service string) (string, error) {
