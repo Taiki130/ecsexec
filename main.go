@@ -17,6 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ecs/types"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/manifoldco/promptui"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -34,7 +35,9 @@ func main() {
 		if !ok {
 			enteredRegion, err := promptRegion()
 			if err != nil {
-				log.Fatalf("Faild to get region name: %w", err)
+				logrus.WithFields(logrus.Fields{
+					"error": err,
+				}).Fatal("Faild to get region name")
 			}
 			*region = enteredRegion
 		} else {
@@ -44,7 +47,9 @@ func main() {
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(*region), config.WithSharedConfigProfile(*profile))
 	if err != nil {
-		log.Fatalf("Failed to load configuration: %w", err)
+		logrus.WithFields(logrus.Fields{
+			"error": err,
+		}).Fatal("Failed to load configuration")
 	}
 	client := ecs.NewFromConfig(cfg)
 
@@ -52,7 +57,9 @@ func main() {
 	if *cluster == "" {
 		clusterVar, err := selectCluster(client)
 		if err != nil {
-			log.Fatalf("Faild to retrieve cluster name: %w", err)
+			logrus.WithFields(logrus.Fields{
+				"error": err,
+			}).Fatal("Faild to retrieve cluster name")
 		}
 		*cluster = clusterVar
 	}
@@ -60,29 +67,45 @@ func main() {
 	if *service == "" {
 		serviceVar, err := selectService(client, *cluster)
 		if err != nil {
-			log.Fatalf("Faild to retrieve service name: %w", err)
+			logrus.WithFields(logrus.Fields{
+				"error":   err,
+				"cluster": *cluster,
+			}).Fatal("Failed to retrieve service name")
 		}
 		*service = serviceVar
 	}
 
 	taskID, err := getTaskID(client, *cluster, *service)
 	if err != nil {
-		log.Fatalf("Failed to retrieve task ID: %w", err)
+		logrus.WithFields(logrus.Fields{
+			"error":   err,
+			"cluster": *cluster,
+			"service": *service,
+		}).Fatal("Failed to retrieve task ID")
 	}
-
-	// log.Println(taskID)
 
 	if *container == "" {
 		containerVar, err := selectContainer(client, *cluster, taskID)
 		if err != nil {
-			log.Fatalf("Faild to retrieve container name: %w", err)
+			logrus.WithFields(logrus.Fields{
+				"error":   err,
+				"cluster": *cluster,
+				"service": *service,
+				"taskID":  taskID,
+			}).Fatal("Faild to retrieve container name")
 		}
 		*container = containerVar
 	}
 
 	runtimeID, err := getRuntimeID(client, taskID, *cluster, *container)
 	if err != nil {
-		log.Fatalf("Failed to retrieve runtime ID: %w", err)
+		logrus.WithFields(logrus.Fields{
+			"error":     err,
+			"cluster":   *cluster,
+			"service":   *service,
+			"taskID":    taskID,
+			"container": *container,
+		}).Fatal("Failed to retrieve runtime ID")
 	}
 
 	resp, err := client.ExecuteCommand(context.TODO(), &ecs.ExecuteCommandInput{
@@ -92,10 +115,28 @@ func main() {
 		Interactive: true,
 		Task:        aws.String(taskID),
 	})
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error":     err,
+			"cluster":   *cluster,
+			"service":   *service,
+			"taskID":    taskID,
+			"container": *container,
+		}).Fatal("Failed to execute command")
+	}
 
 	target := fmt.Sprintf("ecs:%s_%s_%s", *cluster, taskID, runtimeID)
 
 	err = startSession(resp.Session, *region, target)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error":     err,
+			"cluster":   *cluster,
+			"service":   *service,
+			"taskID":    taskID,
+			"container": *container,
+		}).Fatal("Session Failed")
+	}
 }
 
 func promptRegion() (string, error) {
@@ -118,7 +159,7 @@ func selectCluster(client *ecs.Client) (string, error) {
 	}
 	clusterArns := resp.ClusterArns
 	if len(clusterArns) == 0 {
-		return "", errors.New("no ECS cluster found.")
+		return "", errors.New("no ECS cluster found")
 	}
 
 	var clusterNames []string
@@ -151,7 +192,7 @@ func selectService(client *ecs.Client, cluster string) (string, error) {
 	}
 	serviceArns := resp.ServiceArns
 	if len(serviceArns) == 0 {
-		return "", errors.New("No ECS task found.")
+		return "", errors.New("no ECS task found")
 	}
 	var serviceNames []string
 	for _, arn := range serviceArns {
@@ -206,7 +247,7 @@ func getTaskID(client *ecs.Client, cluster, service string) (string, error) {
 	}
 	taskArns := resp.TaskArns
 	if len(taskArns) == 0 {
-		return "", errors.New("No ECS task found.")
+		return "", errors.New("no ECS task found")
 	}
 	taskID := strings.Split(taskArns[0], "/")[2]
 	return taskID, nil
