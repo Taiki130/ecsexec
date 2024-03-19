@@ -32,8 +32,11 @@ func main() {
 	if *region == "" {
 		regionVar, ok := os.LookupEnv("AWS_REGION")
 		if !ok {
-			fmt.Print("Enter region: ")
-			fmt.Scanf("%s", &region)
+			enteredRegion, err := promptRegion()
+			if err != nil {
+				log.Fatalf("Faild to get region name: %w", err)
+			}
+			*region = enteredRegion
 		} else {
 			*region = regionVar
 		}
@@ -45,6 +48,7 @@ func main() {
 	}
 	client := ecs.NewFromConfig(cfg)
 
+	log.Println(*cluster)
 	if *cluster == "" {
 		clusterVar, err := selectCluster(client)
 		if err != nil {
@@ -92,6 +96,18 @@ func main() {
 	err = startSession(resp.Session, *region, target)
 }
 
+func promptRegion() (string, error) {
+	l := "Enter Region"
+	prompt := promptui.Prompt{
+		Label: l,
+	}
+	result, err := prompt.Run()
+	if err != nil {
+		return "", err
+	}
+	return result, nil
+}
+
 func selectCluster(client *ecs.Client) (string, error) {
 	l := "Select cluster"
 	resp, err := client.ListClusters(context.TODO(), &ecs.ListClustersInput{})
@@ -102,19 +118,26 @@ func selectCluster(client *ecs.Client) (string, error) {
 	if len(clusterArns) == 0 {
 		return "", errors.New("no ECS cluster found.")
 	}
-	var i []string
+
+	// log.Println(clusterArns)
+	var clusterNames []string
 	for _, arn := range clusterArns {
 		clusterName := strings.Split(arn, "/")[1]
-		i = append(i, clusterName)
+		clusterNames = append(clusterNames, clusterName)
 	}
+	// log.Println(clusterNames)
+
 	prompt := promptui.Select{
 		Label: l,
-		Items: i,
+		Items: clusterNames,
 	}
+
 	_, result, err := prompt.Run()
+
 	if err != nil {
 		return "", err
 	}
+
 	return result, nil
 }
 
