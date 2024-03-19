@@ -159,7 +159,7 @@ func selectCluster(client *ecs.Client) (string, error) {
 	}
 	clusterArns := resp.ClusterArns
 	if len(clusterArns) == 0 {
-		return "", errors.New("no ECS cluster found.")
+		return "", errors.New("no ECS cluster found")
 	}
 
 	var clusterNames []string
@@ -192,7 +192,7 @@ func selectService(client *ecs.Client, cluster string) (string, error) {
 	}
 	serviceArns := resp.ServiceArns
 	if len(serviceArns) == 0 {
-		return "", errors.New("No ECS task found.")
+		return "", errors.New("no ECS task found")
 	}
 	var serviceNames []string
 	for _, arn := range serviceArns {
@@ -247,7 +247,7 @@ func getTaskID(client *ecs.Client, cluster, service string) (string, error) {
 	}
 	taskArns := resp.TaskArns
 	if len(taskArns) == 0 {
-		return "", errors.New("No ECS task found.")
+		return "", errors.New("no ECS task found")
 	}
 	taskID := strings.Split(taskArns[0], "/")[2]
 	return taskID, nil
