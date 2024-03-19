@@ -1,0 +1,17 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    extends: [
+        "config:recommended"
+    ],
+    timezone: "Asia/Tokyo",
+    reviewers: ["Taiki130"],
+    labels: ["dependencies"],
+    packageRules:[
+        {
+            matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+            automerge: true,
+            commitBody: "[skip ci]", // CI実行したくないため
+            ignoreTests: true, // checkがなくても動くように
+        },
+    ],
+}
