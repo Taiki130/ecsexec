@@ -70,6 +70,8 @@ func main() {
 		log.Fatalf("Failed to retrieve task ID: %w", err)
 	}
 
+	// log.Println(taskID)
+
 	if *container == "" {
 		containerVar, err := selectContainer(client, *cluster, taskID)
 		if err != nil {
@@ -119,13 +121,11 @@ func selectCluster(client *ecs.Client) (string, error) {
 		return "", errors.New("no ECS cluster found.")
 	}
 
-	// log.Println(clusterArns)
 	var clusterNames []string
 	for _, arn := range clusterArns {
 		clusterName := strings.Split(arn, "/")[1]
 		clusterNames = append(clusterNames, clusterName)
 	}
-	// log.Println(clusterNames)
 
 	prompt := promptui.Select{
 		Label: l,
@@ -153,14 +153,14 @@ func selectService(client *ecs.Client, cluster string) (string, error) {
 	if len(serviceArns) == 0 {
 		return "", errors.New("No ECS task found.")
 	}
-	var i []string
+	var serviceNames []string
 	for _, arn := range serviceArns {
 		serviceName := strings.Split(arn, "/")[2]
-		i = append(i, serviceName)
+		serviceNames = append(serviceNames, serviceName)
 	}
 	prompt := promptui.Select{
 		Label: l,
-		Items: i,
+		Items: serviceNames,
 	}
 	_, result, err := prompt.Run()
 	if err != nil {
@@ -178,10 +178,16 @@ func selectContainer(client *ecs.Client, cluster, taskID string) (string, error)
 	if err != nil {
 		return "", err
 	}
-	i := resp.Tasks[0].Containers
+	containers := resp.Tasks[0].Containers
+	var containerNames []string
+	for _, c := range containers {
+		containerName := *c.Name
+		containerNames = append(containerNames, containerName)
+	}
+
 	prompt := promptui.Select{
 		Label: l,
-		Items: i,
+		Items: containerNames,
 	}
 	_, result, err := prompt.Run()
 	if err != nil {
