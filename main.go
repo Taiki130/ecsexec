@@ -18,9 +18,13 @@ import (
 	"github.com/manifoldco/promptui"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/ini.v1"
+
+	"github.com/Taiki130/ecsexec/pkg/log"
 )
 
 func main() {
+	logE := log.New()
+
 	cluster := flag.String("cluster", "", "the name of your ECS cluster.")
 	service := flag.String("service", "", "the name of your ECS service.")
 	container := flag.String("container", "", "the name of container name.")
@@ -35,7 +39,7 @@ func main() {
 		if !ok {
 			profileVar, err := selectProfile()
 			if err != nil {
-				logrus.WithFields(logrus.Fields{
+				logE.WithFields(logrus.Fields{
 					"error": err,
 				}).Fatal("Faild to get profile name")
 			}
@@ -50,7 +54,7 @@ func main() {
 		if !ok {
 			regionVar, err := promptRegion()
 			if err != nil {
-				logrus.WithFields(logrus.Fields{
+				logE.WithFields(logrus.Fields{
 					"error": err,
 				}).Fatal("Faild to get region name")
 			}
@@ -62,7 +66,7 @@ func main() {
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(*region), config.WithSharedConfigProfile(*profile))
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
+		logE.WithFields(logrus.Fields{
 			"error": err,
 		}).Fatal("Failed to load configuration")
 	}
@@ -72,7 +76,7 @@ func main() {
 	if *cluster == "" {
 		clusterVar, err := selectCluster(client)
 		if err != nil {
-			logrus.WithFields(logrus.Fields{
+			logE.WithFields(logrus.Fields{
 				"error": err,
 			}).Fatal("Faild to retrieve cluster name")
 		}
@@ -82,7 +86,7 @@ func main() {
 	if *service == "" {
 		serviceVar, err := selectService(client, *cluster)
 		if err != nil {
-			logrus.WithFields(logrus.Fields{
+			logE.WithFields(logrus.Fields{
 				"error":   err,
 				"cluster": *cluster,
 			}).Fatal("Failed to retrieve service name")
@@ -93,7 +97,7 @@ func main() {
 	taskID, err := getTaskID(client, *cluster, *service)
 
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
+		logE.WithFields(logrus.Fields{
 			"error":   err,
 			"cluster": *cluster,
 			"service": *service,
@@ -103,7 +107,7 @@ func main() {
 	if *container == "" {
 		containerVar, err := selectContainer(client, *cluster, taskID)
 		if err != nil {
-			logrus.WithFields(logrus.Fields{
+			logE.WithFields(logrus.Fields{
 				"error":   err,
 				"cluster": *cluster,
 				"service": *service,
@@ -116,7 +120,7 @@ func main() {
 	runtimeID, err := getRuntimeID(client, taskID, *cluster, *container)
 
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
+		logE.WithFields(logrus.Fields{
 			"error":     err,
 			"cluster":   *cluster,
 			"service":   *service,
@@ -134,7 +138,7 @@ func main() {
 	})
 
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
+		logE.WithFields(logrus.Fields{
 			"error":     err,
 			"cluster":   *cluster,
 			"service":   *service,
@@ -148,7 +152,7 @@ func main() {
 	err = startSession(resp.Session, *region, target)
 
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
+		logE.WithFields(logrus.Fields{
 			"error":     err,
 			"cluster":   *cluster,
 			"service":   *service,
