@@ -8,20 +8,18 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
 jobs:
   ghalint:
-    permissions:
-      contents: read
+    permissions: {}
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        - uses: aquaproj/aqua-installer@7c7338067bdb97d5bea2acc82b5870afca470d18 # v2.3.0
-          with:
-            aqua_version: v2.25.0
-            cache: true
-        - run: ghalint run
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: aquaproj/aqua-installer@7c7338067bdb97d5bea2acc82b5870afca470d18 # v2.3.0
+        with:
+          aqua_version: v2.25.0
+          cache: true
+      - run: ghalint run
   actionlint:
     permissions:
       checks: write
-      contents: read
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
