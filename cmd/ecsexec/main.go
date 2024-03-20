@@ -12,7 +12,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ecs/types"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
-	"github.com/manifoldco/promptui"
 	"github.com/sirupsen/logrus"
 
 	"github.com/Taiki130/ecsexec/pkg/cli"
@@ -49,7 +48,7 @@ func main() {
 	if *region == "" {
 		regionVar, ok := os.LookupEnv("AWS_REGION")
 		if !ok {
-			regionVar, err := promptRegion()
+			regionVar, err := cli.PromptRegion()
 			if err != nil {
 				logE.WithFields(logrus.Fields{
 					"error": err,
@@ -151,18 +150,6 @@ func main() {
 			"container": *container,
 		}).Fatal("Session Failed")
 	}
-}
-
-func promptRegion() (string, error) {
-	l := "Enter Region"
-	prompt := promptui.Prompt{
-		Label: l,
-	}
-	result, err := prompt.Run()
-	if err != nil {
-		return "", err
-	}
-	return result, nil
 }
 
 func startSession(sess *types.Session, region string, target string) error {
