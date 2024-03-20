@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -15,9 +14,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/manifoldco/promptui"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/ini.v1"
 
-	"github.com/Taiki130/ecsexec/pkg/ecs"
+	"github.com/Taiki130/ecsexec/pkg/cli"
 	"github.com/Taiki130/ecsexec/pkg/log"
 )
 
@@ -36,7 +34,7 @@ func main() {
 	if *profile == "" {
 		profileVar, ok := os.LookupEnv("AWS_PROFILE")
 		if !ok {
-			profileVar, err := selectProfile()
+			profileVar, err := cli.SelectProfile()
 			if err != nil {
 				logE.WithFields(logrus.Fields{
 					"error": err,
@@ -70,10 +68,10 @@ func main() {
 		}).Fatal("Failed to load configuration")
 	}
 
-	client := ecs.New(cfg)
+	client := cli.New(cfg)
 
 	if *cluster == "" {
-		clusterVar, err := ecs.SelectCluster(client)
+		clusterVar, err := cli.SelectCluster(client)
 		if err != nil {
 			logE.WithFields(logrus.Fields{
 				"error": err,
@@ -83,7 +81,7 @@ func main() {
 	}
 
 	if *service == "" {
-		serviceVar, err := ecs.SelectService(client, *cluster)
+		serviceVar, err := cli.SelectService(client, *cluster)
 		if err != nil {
 			logE.WithFields(logrus.Fields{
 				"error":   err,
@@ -93,7 +91,7 @@ func main() {
 		*service = serviceVar
 	}
 
-	taskID, err := ecs.GetTaskID(client, *cluster, *service)
+	taskID, err := cli.GetTaskID(client, *cluster, *service)
 
 	if err != nil {
 		logE.WithFields(logrus.Fields{
@@ -104,7 +102,7 @@ func main() {
 	}
 
 	if *container == "" {
-		containerVar, err := ecs.SelectContainer(client, *cluster, taskID)
+		containerVar, err := cli.SelectContainer(client, *cluster, taskID)
 		if err != nil {
 			logE.WithFields(logrus.Fields{
 				"error":   err,
@@ -116,7 +114,7 @@ func main() {
 		*container = containerVar
 	}
 
-	runtimeID, err := ecs.GetRuntimeID(client, taskID, *cluster, *container)
+	runtimeID, err := cli.GetRuntimeID(client, taskID, *cluster, *container)
 
 	if err != nil {
 		logE.WithFields(logrus.Fields{
@@ -128,7 +126,7 @@ func main() {
 		}).Fatal("Failed to retrieve runtime ID")
 	}
 
-	resp, err := ecs.Execute(client, *cluster, taskID, *container, *command)
+	resp, err := cli.Execute(client, *cluster, taskID, *container, *command)
 
 	if err != nil {
 		logE.WithFields(logrus.Fields{
@@ -153,34 +151,6 @@ func main() {
 			"container": *container,
 		}).Fatal("Session Failed")
 	}
-}
-
-func selectProfile() (string, error) {
-	l := "Select Profile"
-
-	fname := config.DefaultSharedConfigFilename()
-	f, err := ini.Load(fname)
-	if err != nil {
-		return "", err
-	}
-
-	var profiles []string
-	for _, v := range f.Sections() {
-		if len(v.Keys()) != 0 {
-			profile := strings.Split(v.Name(), " ")[1]
-			profiles = append(profiles, profile)
-		}
-	}
-
-	prompt := promptui.Select{
-		Label: l,
-		Items: profiles,
-	}
-	_, result, err := prompt.Run()
-	if err != nil {
-		return "", err
-	}
-	return result, nil
 }
 
 func promptRegion() (string, error) {
