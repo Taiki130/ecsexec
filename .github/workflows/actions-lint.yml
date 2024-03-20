@@ -8,8 +8,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
 jobs:
   ghalint:
-    permissions:
-      contents: read
+    permissions: {}
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -21,7 +20,6 @@ jobs:
   actionlint:
     permissions:
       checks: write
-      contents: read
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
