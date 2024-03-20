@@ -6,6 +6,8 @@ on:
     types: [opened, reopened, synchronize]
   issue_comment:
     types: [created, edited]
+  issues:
+    types: [labeled]
 
 permissions: {}
 
