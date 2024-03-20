@@ -12,17 +12,9 @@ func SelectProfile() (string, error) {
 	l := "Select Profile"
 
 	fname := config.DefaultSharedConfigFilename()
-	f, err := ini.Load(fname)
+	profiles, err := getProfilesFromIni(fname)
 	if err != nil {
 		return "", err
-	}
-
-	var profiles []string
-	for _, v := range f.Sections() {
-		if len(v.Keys()) != 0 {
-			profile := getProfileFromIniSection(v.Name())
-			profiles = append(profiles, profile)
-		}
 	}
 
 	prompt := promptui.Select{
@@ -34,6 +26,21 @@ func SelectProfile() (string, error) {
 		return "", err
 	}
 	return result, nil
+}
+
+func getProfilesFromIni(fname string) (profiles []string, err error) {
+	f, err := ini.Load(fname)
+	if err != nil {
+		return profiles, err
+	}
+
+	for _, v := range f.Sections() {
+		if len(v.Keys()) != 0 {
+			profile := getProfileFromIniSection(v.Name())
+			profiles = append(profiles, profile)
+		}
+	}
+	return
 }
 
 func getProfileFromIniSection(section string) string {
