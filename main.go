@@ -6,7 +6,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -18,6 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/manifoldco/promptui"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/ini.v1"
 )
 
 func main() {
@@ -30,16 +30,31 @@ func main() {
 
 	flag.Parse()
 
+	if *profile == "" {
+		profileVar, ok := os.LookupEnv("AWS_PROFILE")
+		if !ok {
+			profileVar, err := selectProfile()
+			if err != nil {
+				logrus.WithFields(logrus.Fields{
+					"error": err,
+				}).Fatal("Faild to get profile name")
+			}
+			*profile = profileVar
+		} else {
+			*profile = profileVar
+		}
+	}
+
 	if *region == "" {
 		regionVar, ok := os.LookupEnv("AWS_REGION")
 		if !ok {
-			enteredRegion, err := promptRegion()
+			regionVar, err := promptRegion()
 			if err != nil {
 				logrus.WithFields(logrus.Fields{
 					"error": err,
 				}).Fatal("Faild to get region name")
 			}
-			*region = enteredRegion
+			*region = regionVar
 		} else {
 			*region = regionVar
 		}
@@ -51,9 +66,9 @@ func main() {
 			"error": err,
 		}).Fatal("Failed to load configuration")
 	}
+
 	client := ecs.NewFromConfig(cfg)
 
-	log.Println(*cluster)
 	if *cluster == "" {
 		clusterVar, err := selectCluster(client)
 		if err != nil {
@@ -76,6 +91,7 @@ func main() {
 	}
 
 	taskID, err := getTaskID(client, *cluster, *service)
+
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error":   err,
@@ -98,6 +114,7 @@ func main() {
 	}
 
 	runtimeID, err := getRuntimeID(client, taskID, *cluster, *container)
+
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error":     err,
@@ -115,6 +132,7 @@ func main() {
 		Interactive: true,
 		Task:        aws.String(taskID),
 	})
+
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error":     err,
@@ -128,6 +146,7 @@ func main() {
 	target := fmt.Sprintf("ecs:%s_%s_%s", *cluster, taskID, runtimeID)
 
 	err = startSession(resp.Session, *region, target)
+
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error":     err,
@@ -137,6 +156,34 @@ func main() {
 			"container": *container,
 		}).Fatal("Session Failed")
 	}
+}
+
+func selectProfile() (string, error) {
+	l := "Select Profile"
+
+	fname := config.DefaultSharedConfigFilename()
+	f, err := ini.Load(fname)
+	if err != nil {
+		return "", err
+	}
+
+	var profiles []string
+	for _, v := range f.Sections() {
+		if len(v.Keys()) != 0 {
+			profile := strings.Split(v.Name(), " ")[1]
+			profiles = append(profiles, profile)
+		}
+	}
+
+	prompt := promptui.Select{
+		Label: l,
+		Items: profiles,
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		return "", err
+	}
+	return result, nil
 }
 
 func promptRegion() (string, error) {
