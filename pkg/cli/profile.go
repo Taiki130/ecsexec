@@ -20,7 +20,7 @@ func SelectProfile() (string, error) {
 	var profiles []string
 	for _, v := range f.Sections() {
 		if len(v.Keys()) != 0 {
-			profile := strings.Split(v.Name(), " ")[1]
+			profile := getProfileFromIniSection(v.Name())
 			profiles = append(profiles, profile)
 		}
 	}
@@ -34,4 +34,8 @@ func SelectProfile() (string, error) {
 		return "", err
 	}
 	return result, nil
+}
+
+func getProfileFromIniSection(section string) string {
+	return strings.Split(section, " ")[1]
 }
