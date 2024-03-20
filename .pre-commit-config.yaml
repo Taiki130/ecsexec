@@ -20,7 +20,7 @@ repos:
       - id: conventional-commit-msg-validation
         name: commit message conventional validation
         language: pygrep
-        entry: '^(?:fixup! )?(breaking|build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w `])+([\s\S]*)'
+        entry: '^(?:fixup! )?(breaking|build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w `])+([\s\S]*?)(\([\w\s:/\.\-]+\)|https:\/\/github\.com\/[^\/]+\/[^\/]+\/issues\/\d+)$'
         args: [--multiline, --negate]
         stages: [commit-msg]
       - id: gofmt

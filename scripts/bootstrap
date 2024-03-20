@@ -9,5 +9,6 @@ if [[ -f "Brewfile" ]] && [[ "$(uname -s)" = "Darwin" ]]; then
 fi
 
 if [[ -f "aqua.yaml" ]]; then
+    echo "==> Installing Aqua dependencies…"
     aqua i
 fi
