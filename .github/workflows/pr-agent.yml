@@ -1,3 +1,4 @@
+---
 name: pr-agent
 
 on:
@@ -6,21 +7,22 @@ on:
   issue_comment:
     types: [created, edited]
 
-permissions:
-  pull-requests: write
-  issues: write
+permissions: {}
 
 jobs:
   pr_agent:
     runs-on: ubuntu-latest
     name: Run PR Agent
     if: ${{ github.event.sender.type != 'Bot' }}
+    permissions:
+      pull-requests: write # To write PR comment
+      issues: write
     steps:
       - id: labels
         shell: bash
         env:
           GH_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.number }}
         run: |
           json=$(gh pr view "$PR_NUMBER" --json labels | jq -c '.labels|map(.name)')
