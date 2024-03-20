@@ -1,0 +1,20 @@
+---
+name: Trivy
+on:
+  pull_request:
+    paths:
+      - "tofu/*.tf"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+jobs:
+  trivy:
+    permissions: {}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@062f2592684a31eb3aa050cc61e7ca1451cecd3d # v0.18.0
+        with:
+          scan-type: 'config'
+          scan-ref: ./tofu/
+          exit-code: '1'
