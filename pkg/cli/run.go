@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
 
@@ -21,7 +20,6 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 	}
 
 	profile := ctx.String("profile")
-	runner.LogE.WithFields(logrus.Fields{"profile": profile}).Info("debug")
 	if profile == "" {
 		profile, err = selectProfile()
 		if err != nil {
