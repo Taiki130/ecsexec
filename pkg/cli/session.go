@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
-func StartSession(sess *types.Session, region string, target string) error {
+func startSession(sess *types.Session, region string, target string) error {
 	sessJSON, _ := json.Marshal(sess)
 	endpoint := getSSMEndpoint(region)
 	payload := ssm.StartSessionInput{

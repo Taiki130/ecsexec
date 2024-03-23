@@ -8,7 +8,7 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func SelectProfile() (string, error) {
+func selectProfile() (string, error) {
 	l := "Select Profile"
 
 	fname := config.DefaultSharedConfigFilename()
