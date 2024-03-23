@@ -10,11 +10,11 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func New(cfg aws.Config) *ecs.Client {
+func loadConfig(cfg aws.Config) *ecs.Client {
 	return ecs.NewFromConfig(cfg)
 }
 
-func SelectCluster(client *ecs.Client) (string, error) {
+func selectCluster(client *ecs.Client) (string, error) {
 	l := "Select cluster"
 	resp, err := client.ListClusters(context.TODO(), &ecs.ListClustersInput{})
 	if err != nil {
@@ -45,7 +45,7 @@ func SelectCluster(client *ecs.Client) (string, error) {
 	return result, nil
 }
 
-func SelectService(client *ecs.Client, cluster string) (string, error) {
+func selectService(client *ecs.Client, cluster string) (string, error) {
 	l := "Select service"
 	resp, err := client.ListServices(context.TODO(), &ecs.ListServicesInput{
 		Cluster: aws.String(cluster),
@@ -73,7 +73,7 @@ func SelectService(client *ecs.Client, cluster string) (string, error) {
 	return result, nil
 }
 
-func GetTaskID(client *ecs.Client, cluster, service string) (string, error) {
+func getTaskID(client *ecs.Client, cluster, service string) (string, error) {
 	resp, err := client.ListTasks(context.TODO(), &ecs.ListTasksInput{
 		Cluster:     aws.String(cluster),
 		ServiceName: aws.String(service),
@@ -89,7 +89,7 @@ func GetTaskID(client *ecs.Client, cluster, service string) (string, error) {
 	return taskID, nil
 }
 
-func GetRuntimeID(client *ecs.Client, taskID, cluster, container string) (string, error) {
+func getRuntimeID(client *ecs.Client, taskID, cluster, container string) (string, error) {
 	descTasks, err := client.DescribeTasks(context.TODO(), &ecs.DescribeTasksInput{
 		Tasks:   []string{taskID},
 		Cluster: aws.String(cluster),
@@ -106,7 +106,7 @@ func GetRuntimeID(client *ecs.Client, taskID, cluster, container string) (string
 	return runtimeID, nil
 }
 
-func SelectContainer(client *ecs.Client, cluster, taskID string) (string, error) {
+func selectContainer(client *ecs.Client, cluster, taskID string) (string, error) {
 	l := "Select container"
 	resp, err := client.DescribeTasks(context.TODO(), &ecs.DescribeTasksInput{
 		Cluster: aws.String(cluster),
@@ -133,7 +133,7 @@ func SelectContainer(client *ecs.Client, cluster, taskID string) (string, error)
 	return result, err
 }
 
-func Execute(client *ecs.Client, cluster, taskID, container, command string) (*ecs.ExecuteCommandOutput, error) {
+func executeCommand(client *ecs.Client, cluster, taskID, container, command string) (*ecs.ExecuteCommandOutput, error) {
 	return client.ExecuteCommand(context.TODO(), &ecs.ExecuteCommandInput{
 		Cluster:     aws.String(cluster),
 		Command:     aws.String(command),
