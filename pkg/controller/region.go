@@ -3,7 +3,7 @@ package controller
 import "github.com/manifoldco/promptui"
 
 func PromptRegion() (string, error) {
-	l := "Enter Region"
+	l := "Enter region"
 	prompt := promptui.Prompt{
 		Label: l,
 	}
