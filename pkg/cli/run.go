@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -27,7 +26,7 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 		}
 	}
 
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(region), config.WithSharedConfigProfile(profile))
+	cfg, err := config.LoadDefaultConfig(ctx.Context, config.WithRegion(region), config.WithSharedConfigProfile(profile))
 	if err != nil {
 		return fmt.Errorf("failed to load configuration: %w", err)
 	}
@@ -36,7 +35,7 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 
 	cluster := ctx.String("cluster")
 	if cluster == "" {
-		cluster, err = selectCluster(client)
+		cluster, err = selectCluster(ctx.Context, client)
 		if err != nil {
 			return fmt.Errorf("faild to retrieve cluster name: %w", err)
 		}
@@ -44,26 +43,26 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 
 	service := ctx.String("service")
 	if service == "" {
-		service, err = selectService(client, cluster)
+		service, err = selectService(ctx.Context, client, cluster)
 		if err != nil {
 			return fmt.Errorf("failed to retrieve service name: %w", err)
 		}
 	}
 
-	taskID, err := getTaskID(client, cluster, service)
+	taskID, err := getTaskID(ctx.Context, client, cluster, service)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve task ID: %w", err)
 	}
 
 	container := ctx.String("container")
 	if container == "" {
-		container, err = selectContainer(client, cluster, taskID)
+		container, err = selectContainer(ctx.Context, client, cluster, taskID)
 		if err != nil {
 			return fmt.Errorf("failed to retrieve container name: %w", err)
 		}
 	}
 
-	runtimeID, err := getRuntimeID(client, taskID, cluster, container)
+	runtimeID, err := getRuntimeID(ctx.Context, client, taskID, cluster, container)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve runtime ID: %w", err)
 	}
@@ -73,7 +72,7 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 		command = "/bin/bash"
 	}
 
-	resp, err := executeCommand(client, cluster, taskID, container, command)
+	resp, err := executeCommand(ctx.Context, client, cluster, taskID, container, command)
 	if err != nil {
 		return fmt.Errorf("failed to execute command: %w", err)
 	}
