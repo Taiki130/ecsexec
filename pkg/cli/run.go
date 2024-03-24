@@ -15,7 +15,7 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 	if region == "" {
 		region, err = controller.SelectRegion()
 		if err != nil {
-			return fmt.Errorf("faild to get region name: %w", err)
+			return fmt.Errorf("failed to get region name: %w", err)
 		}
 	}
 
