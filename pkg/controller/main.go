@@ -1,20 +1,28 @@
-package cli
+package controller
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
+	"github.com/aws/aws-sdk-go-v2/service/ecs/types"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/manifoldco/promptui"
+	"gopkg.in/ini.v1"
 )
 
-func loadConfig(cfg aws.Config) *ecs.Client {
+func LoadConfig(cfg aws.Config) *ecs.Client {
 	return ecs.NewFromConfig(cfg)
 }
 
-func selectCluster(ctx context.Context, client *ecs.Client) (string, error) {
+func SelectCluster(ctx context.Context, client *ecs.Client) (string, error) {
 	l := "Select cluster"
 	resp, err := client.ListClusters(ctx, &ecs.ListClustersInput{})
 	if err != nil {
@@ -45,7 +53,7 @@ func selectCluster(ctx context.Context, client *ecs.Client) (string, error) {
 	return result, nil
 }
 
-func selectService(ctx context.Context, client *ecs.Client, cluster string) (string, error) {
+func SelectService(ctx context.Context, client *ecs.Client, cluster string) (string, error) {
 	l := "Select service"
 	resp, err := client.ListServices(ctx, &ecs.ListServicesInput{
 		Cluster: aws.String(cluster),
@@ -73,7 +81,7 @@ func selectService(ctx context.Context, client *ecs.Client, cluster string) (str
 	return result, nil
 }
 
-func getTaskID(ctx context.Context, client *ecs.Client, cluster, service string) (string, error) {
+func GetTaskID(ctx context.Context, client *ecs.Client, cluster, service string) (string, error) {
 	resp, err := client.ListTasks(ctx, &ecs.ListTasksInput{
 		Cluster:     aws.String(cluster),
 		ServiceName: aws.String(service),
@@ -89,7 +97,7 @@ func getTaskID(ctx context.Context, client *ecs.Client, cluster, service string)
 	return taskID, nil
 }
 
-func getRuntimeID(ctx context.Context, client *ecs.Client, taskID, cluster, container string) (string, error) {
+func GetRuntimeID(ctx context.Context, client *ecs.Client, taskID, cluster, container string) (string, error) {
 	descTasks, err := client.DescribeTasks(ctx, &ecs.DescribeTasksInput{
 		Tasks:   []string{taskID},
 		Cluster: aws.String(cluster),
@@ -106,7 +114,7 @@ func getRuntimeID(ctx context.Context, client *ecs.Client, taskID, cluster, cont
 	return runtimeID, nil
 }
 
-func selectContainer(ctx context.Context, client *ecs.Client, cluster, taskID string) (string, error) {
+func SelectContainer(ctx context.Context, client *ecs.Client, cluster, taskID string) (string, error) {
 	l := "Select container"
 	resp, err := client.DescribeTasks(ctx, &ecs.DescribeTasksInput{
 		Cluster: aws.String(cluster),
@@ -133,7 +141,7 @@ func selectContainer(ctx context.Context, client *ecs.Client, cluster, taskID st
 	return result, err
 }
 
-func executeCommand(ctx context.Context, client *ecs.Client, cluster, taskID, container, command string) (*ecs.ExecuteCommandOutput, error) {
+func ExecuteCommand(ctx context.Context, client *ecs.Client, cluster, taskID, container, command string) (*ecs.ExecuteCommandOutput, error) {
 	return client.ExecuteCommand(ctx, &ecs.ExecuteCommandInput{
 		Cluster:     aws.String(cluster),
 		Command:     aws.String(command),
@@ -141,4 +149,80 @@ func executeCommand(ctx context.Context, client *ecs.Client, cluster, taskID, co
 		Interactive: true,
 		Task:        aws.String(taskID),
 	})
+}
+
+func StartSession(sess *types.Session, region string, target string) error {
+	sessJSON, _ := json.Marshal(sess)
+	endpoint := getSSMEndpoint(region)
+	payload := ssm.StartSessionInput{
+		Target: aws.String(target),
+	}
+	payloadJSON, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command(
+		"session-manager-plugin", string(sessJSON), region, "StartSession", "", string(payloadJSON), endpoint,
+	)
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Run()
+	return nil
+}
+
+func getSSMEndpoint(region string) string {
+	return fmt.Sprintf("https://ssm.%s.amazonaws.com", region)
+}
+
+func PromptRegion() (string, error) {
+	l := "Enter Region"
+	prompt := promptui.Prompt{
+		Label: l,
+	}
+	result, err := prompt.Run()
+	if err != nil {
+		return "", err
+	}
+	return result, nil
+}
+
+func SelectProfile() (string, error) {
+	l := "Select profile"
+
+	fname := config.DefaultSharedConfigFilename()
+	profiles, err := getProfilesFromIni(fname)
+	if err != nil {
+		return "", err
+	}
+
+	prompt := promptui.Select{
+		Label: l,
+		Items: profiles,
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		return "", err
+	}
+	return result, nil
+}
+
+func getProfilesFromIni(fname string) (profiles []string, err error) {
+	f, err := ini.Load(fname)
+	if err != nil {
+		return profiles, err
+	}
+
+	for _, v := range f.Sections() {
+		if len(v.Keys()) != 0 {
+			profile := getProfileFromIniSection(v.Name())
+			profiles = append(profiles, profile)
+		}
+	}
+	return
+}
+
+func getProfileFromIniSection(section string) string {
+	return strings.Split(section, " ")[1]
 }

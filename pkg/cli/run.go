@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	"github.com/Taiki130/ecsexec/pkg/controller"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/urfave/cli/v2"
 )
@@ -12,7 +13,7 @@ var err error
 func (runner *Runner) execute(ctx *cli.Context) error {
 	region := ctx.String("region")
 	if region == "" {
-		region, err = promptRegion()
+		region, err = controller.PromptRegion()
 		if err != nil {
 			return fmt.Errorf("faild to get region name: %w", err)
 		}
@@ -20,7 +21,7 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 
 	profile := ctx.String("profile")
 	if profile == "" {
-		profile, err = selectProfile()
+		profile, err = controller.SelectProfile()
 		if err != nil {
 			return fmt.Errorf("faild to get profile name: %w", err)
 		}
@@ -31,11 +32,11 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 		return fmt.Errorf("failed to load configuration: %w", err)
 	}
 
-	client := loadConfig(cfg)
+	client := controller.LoadConfig(cfg)
 
 	cluster := ctx.String("cluster")
 	if cluster == "" {
-		cluster, err = selectCluster(ctx.Context, client)
+		cluster, err = controller.SelectCluster(ctx.Context, client)
 		if err != nil {
 			return fmt.Errorf("faild to retrieve cluster name: %w", err)
 		}
@@ -43,26 +44,26 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 
 	service := ctx.String("service")
 	if service == "" {
-		service, err = selectService(ctx.Context, client, cluster)
+		service, err = controller.SelectService(ctx.Context, client, cluster)
 		if err != nil {
 			return fmt.Errorf("failed to retrieve service name: %w", err)
 		}
 	}
 
-	taskID, err := getTaskID(ctx.Context, client, cluster, service)
+	taskID, err := controller.GetTaskID(ctx.Context, client, cluster, service)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve task ID: %w", err)
 	}
 
 	container := ctx.String("container")
 	if container == "" {
-		container, err = selectContainer(ctx.Context, client, cluster, taskID)
+		container, err = controller.SelectContainer(ctx.Context, client, cluster, taskID)
 		if err != nil {
 			return fmt.Errorf("failed to retrieve container name: %w", err)
 		}
 	}
 
-	runtimeID, err := getRuntimeID(ctx.Context, client, taskID, cluster, container)
+	runtimeID, err := controller.GetRuntimeID(ctx.Context, client, taskID, cluster, container)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve runtime ID: %w", err)
 	}
@@ -72,14 +73,14 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 		command = "/bin/bash"
 	}
 
-	resp, err := executeCommand(ctx.Context, client, cluster, taskID, container, command)
+	resp, err := controller.ExecuteCommand(ctx.Context, client, cluster, taskID, container, command)
 	if err != nil {
 		return fmt.Errorf("failed to execute command: %w", err)
 	}
 
 	target := fmt.Sprintf("ecs:%s_%s_%s", cluster, taskID, runtimeID)
 
-	err = startSession(resp.Session, region, target)
+	err = controller.StartSession(resp.Session, region, target)
 	if err != nil {
 		return fmt.Errorf("failed session: %w", err)
 	}
