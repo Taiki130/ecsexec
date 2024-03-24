@@ -73,16 +73,6 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 		command = "/bin/bash"
 	}
 
-	resp, err := controller.ExecuteCommand(ctx.Context, client, cluster, taskID, container, command)
-	if err != nil {
-		return fmt.Errorf("failed to execute command: %w", err)
-	}
-
-	target := fmt.Sprintf("ecs:%s_%s_%s", cluster, taskID, runtimeID)
-
-	err = controller.StartSession(resp.Session, region, target)
-	if err != nil {
-		return fmt.Errorf("failed session: %w", err)
-	}
-	return nil
+	ctrl := controller.New(client)
+	return ctrl.Run(ctx.Context, region, cluster, taskID, container, runtimeID, command)
 }

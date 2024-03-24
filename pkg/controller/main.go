@@ -18,6 +18,29 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+type Controller struct {
+	client *ecs.Client
+}
+
+func New(client *ecs.Client) *Controller {
+	return &Controller{
+		client: client,
+	}
+}
+
+func (ctrl *Controller) Run(ctx context.Context, region, cluster, taskID, container, runtimeID, command string) error {
+	resp, err := executeCommand(ctx, ctrl.client, cluster, taskID, container, command)
+	if err != nil {
+		return fmt.Errorf("failed to execute command: %w", err)
+	}
+	target := fmt.Sprintf("ecs:%s_%s_%s", cluster, taskID, runtimeID)
+	err = startSession(resp.Session, region, target)
+	if err != nil {
+		return fmt.Errorf("failed session: %w", err)
+	}
+	return nil
+}
+
 func LoadConfig(cfg aws.Config) *ecs.Client {
 	return ecs.NewFromConfig(cfg)
 }
@@ -141,7 +164,7 @@ func SelectContainer(ctx context.Context, client *ecs.Client, cluster, taskID st
 	return result, err
 }
 
-func ExecuteCommand(ctx context.Context, client *ecs.Client, cluster, taskID, container, command string) (*ecs.ExecuteCommandOutput, error) {
+func executeCommand(ctx context.Context, client *ecs.Client, cluster, taskID, container, command string) (*ecs.ExecuteCommandOutput, error) {
 	return client.ExecuteCommand(ctx, &ecs.ExecuteCommandInput{
 		Cluster:     aws.String(cluster),
 		Command:     aws.String(command),
@@ -151,7 +174,7 @@ func ExecuteCommand(ctx context.Context, client *ecs.Client, cluster, taskID, co
 	})
 }
 
-func StartSession(sess *types.Session, region string, target string) error {
+func startSession(sess *types.Session, region string, target string) error {
 	sessJSON, _ := json.Marshal(sess)
 	endpoint := getSSMEndpoint(region)
 	payload := ssm.StartSessionInput{
