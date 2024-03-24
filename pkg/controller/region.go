@@ -1,15 +1,21 @@
 package controller
 
-import "github.com/manifoldco/promptui"
+import (
+	"github.com/Taiki130/ecsexec/pkg/constants"
+	"github.com/manifoldco/promptui"
+)
 
-func PromptRegion() (string, error) {
-	l := "Enter region"
-	prompt := promptui.Prompt{
+func SelectRegion() (string, error) {
+	l := "Select region"
+	prompt := promptui.Select{
 		Label: l,
+		Items: constants.AWS_VALID_REGIONS,
 	}
-	result, err := prompt.Run()
+
+	_, result, err := prompt.Run()
 	if err != nil {
 		return "", err
 	}
+
 	return result, nil
 }
