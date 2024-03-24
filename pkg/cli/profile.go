@@ -9,7 +9,7 @@ import (
 )
 
 func selectProfile() (string, error) {
-	l := "Select Profile"
+	l := "Select profile"
 
 	fname := config.DefaultSharedConfigFilename()
 	profiles, err := getProfilesFromIni(fname)
