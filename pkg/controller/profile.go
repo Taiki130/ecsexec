@@ -1,4 +1,4 @@
-package cli
+package controller
 
 import (
 	"strings"
@@ -8,8 +8,8 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func selectProfile() (string, error) {
-	l := "Select Profile"
+func SelectProfile() (string, error) {
+	l := "Select profile"
 
 	fname := config.DefaultSharedConfigFilename()
 	profiles, err := getProfilesFromIni(fname)

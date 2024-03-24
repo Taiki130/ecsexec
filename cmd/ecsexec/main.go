@@ -2,15 +2,13 @@ package main
 
 import (
 	"context"
+	"os"
 	"os/signal"
 	"syscall"
 
-	"os"
-
-	"github.com/sirupsen/logrus"
-
 	"github.com/Taiki130/ecsexec/pkg/cli"
 	"github.com/Taiki130/ecsexec/pkg/log"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {

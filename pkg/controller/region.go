@@ -1,11 +1,9 @@
-package cli
+package controller
 
-import (
-	"github.com/manifoldco/promptui"
-)
+import "github.com/manifoldco/promptui"
 
-func promptRegion() (string, error) {
-	l := "Enter Region"
+func PromptRegion() (string, error) {
+	l := "Enter region"
 	prompt := promptui.Prompt{
 		Label: l,
 	}
