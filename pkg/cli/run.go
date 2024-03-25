@@ -70,7 +70,7 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 
 	command := ctx.String("command")
 	if command == "" {
-		command = "/bin/bash"
+		command = "/bin/sh"
 	}
 
 	ctrl := controller.New(client)

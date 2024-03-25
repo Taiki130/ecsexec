@@ -30,6 +30,9 @@ func SelectCluster(ctx context.Context, client *ecs.Client) (string, error) {
 	prompt := promptui.Select{
 		Label: l,
 		Items: clusterNames,
+		Searcher: func(input string, index int) bool {
+			return strings.Contains(strings.ToLower(clusterNames[index]), strings.ToLower(input))
+		},
 	}
 
 	_, result, err := prompt.Run()
@@ -61,6 +64,9 @@ func SelectService(ctx context.Context, client *ecs.Client, cluster string) (str
 	prompt := promptui.Select{
 		Label: l,
 		Items: serviceNames,
+		Searcher: func(input string, index int) bool {
+			return strings.Contains(strings.ToLower(serviceNames[index]), strings.ToLower(input))
+		},
 	}
 	_, result, err := prompt.Run()
 	if err != nil {
@@ -121,6 +127,9 @@ func SelectContainer(ctx context.Context, client *ecs.Client, cluster, taskID st
 	prompt := promptui.Select{
 		Label: l,
 		Items: containerNames,
+		Searcher: func(input string, index int) bool {
+			return strings.Contains(strings.ToLower(containerNames[index]), strings.ToLower(input))
+		},
 	}
 	_, result, err := prompt.Run()
 	if err != nil {

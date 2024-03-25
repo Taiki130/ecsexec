@@ -21,6 +21,9 @@ func SelectProfile() (string, error) {
 	prompt := promptui.Select{
 		Label: l,
 		Items: profiles,
+		Searcher: func(input string, index int) bool {
+			return strings.Contains(strings.ToLower(profiles[index]), strings.ToLower(input))
+		},
 	}
 	_, result, err := prompt.Run()
 	if err != nil {
