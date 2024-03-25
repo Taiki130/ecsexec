@@ -55,4 +55,4 @@ You can customize the behavior of the ecsexec command using environment variable
 - `ESCEXEC_COMMAND`: Login shell
 
 ## License
-This project is licensed under the [MIT License](https://github.com/Taiki130/ecsexec/blob/main/LICENSE). See the LICENSE file for details.
+This project is licensed under the [MIT License](https://github.com/Taiki130/ecsexec?tab=MIT-1-ov-file#readme). See the LICENSE file for details.
