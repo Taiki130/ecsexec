@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	"github.com/Taiki130/ecsexec/pkg/constants"
 	"github.com/Taiki130/ecsexec/pkg/controller"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/urfave/cli/v2"
@@ -13,7 +14,7 @@ var err error
 func (runner *Runner) execute(ctx *cli.Context) error {
 	region := ctx.String("region")
 	if region == "" {
-		region, err = controller.SelectRegion()
+		region, err = controller.Select("region", constants.AWS_VALID_REGIONS)
 		if err != nil {
 			return fmt.Errorf("failed to get region name: %w", err)
 		}
@@ -50,9 +51,9 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 		}
 	}
 
-	taskID, err := controller.GetTaskID(ctx.Context, client, cluster, service)
+	taskID, err := controller.SelectTaskIDs(ctx.Context, client, cluster, service)
 	if err != nil {
-		return fmt.Errorf("failed to retrieve task ID: %w", err)
+		return fmt.Errorf("failed to retrieve taskID: %w", err)
 	}
 
 	container := ctx.String("container")
@@ -70,7 +71,7 @@ func (runner *Runner) execute(ctx *cli.Context) error {
 
 	command := ctx.String("command")
 	if command == "" {
-		command = "/bin/bash"
+		command = "/bin/sh"
 	}
 
 	ctrl := controller.New(client)
