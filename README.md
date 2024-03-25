@@ -1,5 +1,5 @@
 # ecsexec
-ecsexec is a tool designed to access a shell session within a container running in an ECS task.
+`ecsexec` is a tool designed to access a shell session within a container running in an ECS task.
 
 ## Installation
 You can install this tool by running the following command:
@@ -9,7 +9,7 @@ go get -u github.com/your_username/ecsexec/cmd/ecsexec
 ```
 
 ## Usage
-The ecsexec command can be used with the following syntax:
+The `ecsexec` command can be used with the following syntax:
 
 ```bash
 ecsexec [global options] command [command options]
