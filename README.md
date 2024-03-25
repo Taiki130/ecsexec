@@ -53,3 +53,6 @@ You can customize the behavior of the ecsexec command using environment variable
 - `ECSEXEC_SERVICE`: ECS service name
 - `ECSEXEC_CONTAINER`: Container name
 - `ESCEXEC_COMMAND`: Login shell
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
