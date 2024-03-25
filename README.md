@@ -16,7 +16,7 @@ ecsexec [global options] command [command options]
 ```
 
 ## Interactive Prompt
-If any of the required information is not provided through environment variables or command-line options, `ecsexec` will prompt you interactively to enter the necessary details.
+If any of the required information is not provided through environment variables or command-line options, `ecsexec` will prompt you interactively to select the necessary details.
 
 ## Global Options
 - --region value: Specifies the AWS region name. Default is `$AWS_REGION`.
