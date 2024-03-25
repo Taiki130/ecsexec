@@ -3,15 +3,14 @@ package controller
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
-	"github.com/manifoldco/promptui"
 )
 
 func SelectCluster(ctx context.Context, client *ecs.Client) (string, error) {
-	l := "Select cluster"
 	resp, err := client.ListClusters(ctx, &ecs.ListClustersInput{})
 	if err != nil {
 		return "", err
@@ -27,25 +26,10 @@ func SelectCluster(ctx context.Context, client *ecs.Client) (string, error) {
 		clusterNames = append(clusterNames, clusterName)
 	}
 
-	prompt := promptui.Select{
-		Label: l,
-		Items: clusterNames,
-		Searcher: func(input string, index int) bool {
-			return strings.Contains(strings.ToLower(clusterNames[index]), strings.ToLower(input))
-		},
-	}
-
-	_, result, err := prompt.Run()
-
-	if err != nil {
-		return "", err
-	}
-
-	return result, nil
+	return Select("cluster", clusterNames)
 }
 
 func SelectService(ctx context.Context, client *ecs.Client, cluster string) (string, error) {
-	l := "Select service"
 	resp, err := client.ListServices(ctx, &ecs.ListServicesInput{
 		Cluster: aws.String(cluster),
 	})
@@ -61,21 +45,11 @@ func SelectService(ctx context.Context, client *ecs.Client, cluster string) (str
 		serviceName := strings.Split(arn, "/")[2]
 		serviceNames = append(serviceNames, serviceName)
 	}
-	prompt := promptui.Select{
-		Label: l,
-		Items: serviceNames,
-		Searcher: func(input string, index int) bool {
-			return strings.Contains(strings.ToLower(serviceNames[index]), strings.ToLower(input))
-		},
-	}
-	_, result, err := prompt.Run()
-	if err != nil {
-		return "", err
-	}
-	return result, nil
+
+	return Select("service", serviceNames)
 }
 
-func GetTaskID(ctx context.Context, client *ecs.Client, cluster, service string) (string, error) {
+func SelectTaskIDs(ctx context.Context, client *ecs.Client, cluster, service string) (string, error) {
 	resp, err := client.ListTasks(ctx, &ecs.ListTasksInput{
 		Cluster:     aws.String(cluster),
 		ServiceName: aws.String(service),
@@ -83,12 +57,21 @@ func GetTaskID(ctx context.Context, client *ecs.Client, cluster, service string)
 	if err != nil {
 		return "", err
 	}
-	taskArns := resp.TaskArns
-	if len(taskArns) == 0 {
+	taskARNs := resp.TaskArns
+	if len(taskARNs) == 0 {
 		return "", errors.New("no ECS task found")
 	}
-	taskID := strings.Split(taskArns[0], "/")[2]
-	return taskID, nil
+
+	var taskIDs []string
+	for _, arn := range taskARNs {
+		taskIDs = append(taskIDs, getTaskIDFromTaskArn(arn))
+	}
+
+	return Select("taskID", taskIDs)
+}
+
+func getTaskIDFromTaskArn(taskARN string) string {
+	return strings.Split(taskARN, "/")[2]
 }
 
 func GetRuntimeID(ctx context.Context, client *ecs.Client, taskID, cluster, container string) (string, error) {
@@ -109,7 +92,6 @@ func GetRuntimeID(ctx context.Context, client *ecs.Client, taskID, cluster, cont
 }
 
 func SelectContainer(ctx context.Context, client *ecs.Client, cluster, taskID string) (string, error) {
-	l := "Select container"
 	resp, err := client.DescribeTasks(ctx, &ecs.DescribeTasksInput{
 		Cluster: aws.String(cluster),
 		Tasks:   []string{taskID},
@@ -124,16 +106,25 @@ func SelectContainer(ctx context.Context, client *ecs.Client, cluster, taskID st
 		containerNames = append(containerNames, containerName)
 	}
 
-	prompt := promptui.Select{
-		Label: l,
-		Items: containerNames,
-		Searcher: func(input string, index int) bool {
-			return strings.Contains(strings.ToLower(containerNames[index]), strings.ToLower(input))
-		},
-	}
-	_, result, err := prompt.Run()
+	return Select("container", containerNames)
+
+}
+
+func GetContainers(ctx context.Context, client *ecs.Client, cluster, taskID string) ([]string, error) {
+	resp, err := client.DescribeTasks(ctx, &ecs.DescribeTasksInput{
+		Cluster: aws.String(cluster),
+		Tasks:   []string{taskID},
+	})
 	if err != nil {
-		return "", err
+		return []string{}, fmt.Errorf("failed to describe tasks: %w", err)
 	}
-	return result, err
+
+	containers := resp.Tasks[0].Containers
+	var containerNames []string
+	for _, c := range containers {
+		containerName := *c.Name
+		containerNames = append(containerNames, containerName)
+	}
+
+	return containerNames, nil
 }

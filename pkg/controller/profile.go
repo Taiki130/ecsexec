@@ -1,35 +1,20 @@
 package controller
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/manifoldco/promptui"
 	"gopkg.in/ini.v1"
 )
 
 func SelectProfile() (string, error) {
-	l := "Select profile"
-
 	fname := config.DefaultSharedConfigFilename()
 	profiles, err := getProfilesFromIni(fname)
 	if err != nil {
 		return "", err
 	}
 
-	prompt := promptui.Select{
-		Label: l,
-		Items: profiles,
-		Searcher: func(input string, index int) bool {
-			return strings.Contains(strings.ToLower(profiles[index]), strings.ToLower(input))
-		},
-	}
-	_, result, err := prompt.Run()
-	if err != nil {
-		return "", fmt.Errorf("failed to select profile: %w", err)
-	}
-	return result, nil
+	return Select("profile", profiles)
 }
 
 func getProfilesFromIni(fname string) (profiles []string, err error) {
