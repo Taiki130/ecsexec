@@ -19,13 +19,13 @@ ecsexec [global options] command [command options]
 If any of the required information is not provided through environment variables or command-line options, `ecsexec` will prompt you interactively to select the necessary details.
 
 ## Global Options
-- --region value: Specifies the AWS region name. Default is `$AWS_REGION`.
-- --profile value: Specifies the AWS profile name. Default is `$AWS_PROFILE`.
-- --cluster value: Specifies the ECS cluster name. Default is `$ECSEXEC_CLUSTER`.
-- --service value: Specifies the ECS service name. Default is `$ECSEXEC_SERVICE`.
-- --container value: Specifies the container name. Default is `$ECSEXEC_CONTAINER`.
-- --command value: Specifies the login shell. Default is /bin/sh, and it can be overridden by `$ESCEXEC_COMMAND`.
-- --help, -h: Displays the help message.
+- `--region value`: Specifies the AWS region name. Default is `$AWS_REGION`.
+- `--profile value`: Specifies the AWS profile name. Default is `$AWS_PROFILE`.
+- `--cluster value`: Specifies the ECS cluster name. Default is `$ECSEXEC_CLUSTER`.
+- `--service value`: Specifies the ECS service name. Default is `$ECSEXEC_SERVICE`.
+- `--container value`: Specifies the container name. Default is `$ECSEXEC_CONTAINER`.
+- `--command value`: Specifies the login shell. Default is /bin/sh, and it can be overridden by `$ESCEXEC_COMMAND`.
+- `--help, -h`: Displays the help message.
 
 ## Examples
 ### Simple Usage Example
@@ -36,7 +36,7 @@ ecsexec
 
 ### Specifying flags Example
 ```bash
- ecsexec --region us-east-1 --cluster my-cluster --service my-service --container my-container
+ecsexec --region us-east-1 --cluster my-cluster --service my-service --container my-container
 ```
 
 ### Specifying a Login Shell Example
