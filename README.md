@@ -12,7 +12,7 @@ go install -a github.com/Taiki130/ecsexec/cmd/ecsexec@latest
 The `ecsexec` command can be used with the following syntax:
 
 ```bash
-ecsexec [global options] command [command options]
+ecsexec [global options]
 ```
 
 ## Interactive Prompt
