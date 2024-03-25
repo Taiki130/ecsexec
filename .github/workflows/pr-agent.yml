@@ -32,7 +32,7 @@ jobs:
 
       - id: pr-agent
         if: ${{ contains(fromJSON(steps.labels.outputs.json), 'review-required') }}
-        uses: Codium-ai/pr-agent@c1c89577f7ab8124c3a1348ca348a01ffab3d561 # v0.2
+        uses: Codium-ai/pr-agent@1701eb5b0757cac9a2342d15cfcd8fc2a2d98e8b # v0.21
         env:
           OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
