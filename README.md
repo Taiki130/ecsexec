@@ -5,7 +5,7 @@
 You can install this tool by running the following command:
 
 ```bash
-go get -u github.com/your_username/ecsexec/cmd/ecsexec
+go get -u github.com/Taiki130/ecsexec/cmd/ecsexec
 ```
 
 ## Usage
