@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -23,7 +24,7 @@ func SelectProfile() (string, error) {
 	}
 	_, result, err := prompt.Run()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to select profile: %w", err)
 	}
 	return result, nil
 }

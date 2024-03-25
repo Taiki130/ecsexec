@@ -13,9 +13,9 @@ var err error
 func (runner *Runner) execute(ctx *cli.Context) error {
 	region := ctx.String("region")
 	if region == "" {
-		region, err = controller.PromptRegion()
+		region, err = controller.SelectRegion()
 		if err != nil {
-			return fmt.Errorf("faild to get region name: %w", err)
+			return fmt.Errorf("failed to get region name: %w", err)
 		}
 	}
 
