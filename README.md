@@ -15,6 +15,9 @@ The `ecsexec` command can be used with the following syntax:
 ecsexec [global options] command [command options]
 ```
 
+## Interactive Prompt
+If any of the required information is not provided through environment variables or command-line options, `ecsexec` will prompt you interactively to enter the necessary details.
+
 ## Global Options
 - --region value: Specifies the AWS region name. Default is `$AWS_REGION`.
 - --profile value: Specifies the AWS profile name. Default is `$AWS_PROFILE`.
@@ -28,12 +31,17 @@ ecsexec [global options] command [command options]
 ### Simple Usage Example
 
 ```bash
-ecsexec --region us-east-1 --cluster my-cluster --service my-service --container my-container
+ecsexec
+```
+
+### Specifying flags Example
+```bash
+ ecsexec --region us-east-1 --cluster my-cluster --service my-service --container my-container
 ```
 
 ### Specifying a Login Shell Example
 ```bash
-ecsexec --region us-east-1 --cluster my-cluster --service my-service --container my-container --command /bin/bash
+ecsexec --command /bin/bash
 ```
 
 ## Configuration
