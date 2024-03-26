@@ -5,7 +5,7 @@ go 1.22.1
 require (
 	github.com/aws/aws-sdk-go-v2 v1.26.0
 	github.com/aws/aws-sdk-go-v2/config v1.27.9
-	github.com/aws/aws-sdk-go-v2/service/ecs v1.41.4
+	github.com/aws/aws-sdk-go-v2/service/ecs v1.41.5
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.49.4
 	github.com/manifoldco/promptui v0.9.0
 	github.com/sirupsen/logrus v1.9.3
