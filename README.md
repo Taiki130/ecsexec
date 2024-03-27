@@ -7,7 +7,7 @@ Before using ecsexec, ensure that you have the following prerequisites installed
 1. **AWS CLI**: The AWS Command Line Interface (CLI) is required for managing AWS resources from the command line.
 Installation instructions for the AWS CLI can be found in the AWS documentation: [Installing the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html).
 
-2. **AWS Systems Manager Session Manager Plugin** (`session-manager-plugin`):
+2. **Session Manager Plugin** (`session-manager-plugin`):
 Installation instructions for session-manager-plugin can be found in the AWS documentation: [Session Manager Plugin Installation](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html).
 
 ## Installation
