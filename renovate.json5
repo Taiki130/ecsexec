@@ -1,7 +1,8 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     extends: [
-        "config:recommended"
+        "config:recommended",
+        "github>aquaproj/aqua-renovate-config#1.11.0",
     ],
     timezone: "Asia/Tokyo",
     reviewers: ["Taiki130"],
@@ -10,8 +11,26 @@
         {
             matchUpdateTypes: ["minor", "patch", "pin", "digest"],
             automerge: true,
-            commitBody: "[skip ci]", // CI実行したくないため
-            ignoreTests: true, // checkがなくても動くように
+            commitBody: "[skip ci]",
+            ignoreTests: true,
         },
+        {
+            matchManagers: ["terraform"],
+            matchDepTypes: ["required_provider"],
+            defaultRegistryUrls: ["https://registry.opentofu.org"],
+        },
+        {
+            matchManagers: ["terraform"],
+            matchDepTypes: ["required_version"],
+            enabled: false,
+        }
     ],
+    customManagers: [
+        {
+            customType: "regex",
+            matchStrings: ["\"(?<currentValue>.*)\" # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"],
+            extraVersionTemplate: "^v(?<version>.*)$",
+            versioningTemplate: "semver",
+        },
+    ]
 }
