@@ -1,1 +1,2 @@
 brew "aqua"
+brew "renovate"
