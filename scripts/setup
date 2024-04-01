@@ -1,5 +1,0 @@
-#!/bin/bash
-set -euC
-
-cd "$(dirname "$0")/.."
-./script/bootstrap

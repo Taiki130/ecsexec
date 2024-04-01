@@ -28,8 +28,9 @@
     customManagers: [
         {
             customType: "regex",
+            fileMatch: ["\\.tf"],
             matchStrings: ["\"(?<currentValue>.*)\" # renovate: datasource=(?<datasource>.*) depName=(?<depName>.*)"],
-            extraVersionTemplate: "^v(?<version>.*)$",
+            extractVersionTemplate: "^v(?<version>.*)$",
             versioningTemplate: "semver",
         },
     ]
