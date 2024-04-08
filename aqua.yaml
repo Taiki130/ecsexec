@@ -15,3 +15,4 @@ packages:
   - name: suzuki-shunsuke/ghalint@v0.2.9
   - name: rhysd/actionlint@v1.6.27
   - name: aquasecurity/trivy@v0.50.1
+  - name: goreleaser/goreleaser@v1.25.1
