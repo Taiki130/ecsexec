@@ -15,7 +15,7 @@ You can install this tool by running the following command:
 
 ### HomeBrew
 ```bash
-brew install Taiki130/tap/ecsexec
+brew install Taiki130/ecsexec/ecsexec
 ```
 
 ### go
