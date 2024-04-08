@@ -13,6 +13,12 @@ Installation instructions for session-manager-plugin can be found in the AWS doc
 ## Installation
 You can install this tool by running the following command:
 
+### HomeBrew
+```bash
+brew install Taiki130/tap/ecsexec
+```
+
+### go
 ```bash
 go install -a github.com/Taiki130/ecsexec/cmd/ecsexec@latest
 ```
