@@ -33,5 +33,8 @@ func getProfilesFromIni(fname string) (profiles []string, err error) {
 }
 
 func getProfileFromIniSection(section string) string {
+	if section == "default" {
+		return section
+	}
 	return strings.Split(section, " ")[1]
 }
