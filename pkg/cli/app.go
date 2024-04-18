@@ -45,7 +45,7 @@ func (runner *Runner) Run(ctx context.Context, args ...string) error {
 			&cli.StringFlag{
 				Name:    "command, cmd",
 				Usage:   "login shell. default: /bin/sh",
-				EnvVars: []string{"ESCEXEC_COMMAND"},
+				EnvVars: []string{"ECSEXEC_COMMAND"},
 			},
 		},
 	}
