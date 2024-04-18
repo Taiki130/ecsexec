@@ -39,7 +39,7 @@ If any of the required information is not provided through environment variables
 - `--cluster value`: Specifies the ECS cluster name. Default is `$ECSEXEC_CLUSTER`.
 - `--service value`: Specifies the ECS service name. Default is `$ECSEXEC_SERVICE`.
 - `--container value`: Specifies the container name. Default is `$ECSEXEC_CONTAINER`.
-- `--command value`: Specifies the login shell. Default is /bin/sh, and it can be overridden by `$ESCEXEC_COMMAND`.
+- `--command value`: Specifies the login shell. Default is /bin/sh, and it can be overridden by `$ECSEXEC_COMMAND`.
 - `--help, -h`: Displays the help message.
 
 ## Examples
@@ -67,7 +67,7 @@ You can customize the behavior of the ecsexec command using environment variable
 - `ECSEXEC_CLUSTER`: ECS cluster name
 - `ECSEXEC_SERVICE`: ECS service name
 - `ECSEXEC_CONTAINER`: Container name
-- `ESCEXEC_COMMAND`: Login shell
+- `ECSEXEC_COMMAND`: Login shell
 
 ## License
 This project is licensed under the [MIT License](https://github.com/Taiki130/ecsexec?tab=MIT-1-ov-file#readme). See the LICENSE file for details.
