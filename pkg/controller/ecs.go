@@ -42,7 +42,12 @@ func SelectService(ctx context.Context, client *ecs.Client, cluster string) (str
 	}
 	var serviceNames []string
 	for _, arn := range serviceArns {
-		serviceName := strings.Split(arn, "/")[2]
+		var serviceName string
+		if strings.Count(arn, "/") == 2 {
+			serviceName = strings.Split(arn, "/")[2]
+		} else {
+			serviceName = strings.Split(arn, "/")[1]
+		}
 		serviceNames = append(serviceNames, serviceName)
 	}
 
