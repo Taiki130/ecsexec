@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.6.2" # renovate: datasource=github-releases depName=opentofu/opentofu
+  required_version = "1.7.0" # renovate: datasource=github-releases depName=opentofu/opentofu
   required_providers {
     github = {
       source  = "integrations/github"
