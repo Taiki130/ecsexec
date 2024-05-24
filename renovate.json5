@@ -14,16 +14,6 @@
             commitBody: "[skip ci]",
             ignoreTests: true,
         },
-        {
-            matchManagers: ["terraform"],
-            matchDepTypes: ["required_provider"],
-            defaultRegistryUrls: ["https://registry.opentofu.org"],
-        },
-        {
-            matchManagers: ["terraform"],
-            matchDepTypes: ["required_version"],
-            enabled: false,
-        }
     ],
     customManagers: [
         {
