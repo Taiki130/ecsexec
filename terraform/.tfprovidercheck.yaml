@@ -1,0 +1,9 @@
+providers:
+  - name: registry.terraform.io/hashicorp/aws
+    version: ">= 5.51.0"
+  - name: registry.terraform.io/carlpett/sops
+    version: ">= 1.0.0"
+  - name: registry.terraform.io/integrations/github
+    version: ">= 6.2.1"
+  - name: registry.terraform.io/hashicorp/tls
+    version: ">= 0.2.0"
