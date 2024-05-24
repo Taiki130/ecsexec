@@ -1,0 +1,14 @@
+target_groups:
+  - working_directory: terraform
+    target: terraform
+    aws_region: ap-northeast-1
+    s3_bucket_name_plan_file: taikinoda-tfstate
+    s3_bucket_name_tfmigrate_history: taikinoda-tfstate
+    terraform_plan_config:
+      aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_plan
+    tfmigrate_plan_config:
+      aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_plan
+    terraform_apply_config:
+      aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_apply
+    tfmigrate_apply_config:
+      aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_apply
