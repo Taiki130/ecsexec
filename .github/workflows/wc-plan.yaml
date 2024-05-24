@@ -132,10 +132,9 @@ jobs:
           TFPROVIDERCHECK_CONFIG_BODY: |
             providers:
               - name: registry.terraform.io/hashicorp/aws
-              - name: registry.terraform.io/hashicorp/google
-              - name: registry.terraform.io/hashicorp/null
-              - name: registry.terraform.io/hashicorp/tls
+              - name: registry.terraform.io/carlpett/sops
               - name: registry.terraform.io/integrations/github
+              - name: registry.terraform.io/hashicorp/tls
           GITHUB_TOKEN: ${{steps.pull_request_token.outputs.token}} # For github-comment
 
       - uses: suzuki-shunsuke/tfaction/test@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
