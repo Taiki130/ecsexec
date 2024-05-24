@@ -9,42 +9,23 @@ terraform {
       source  = "carlpett/sops"
       version = "1.0.0"
     }
+    aws = {
+      source = "hashicorp/aws"
+      version = "5.51.0"
+    }
   }
   backend "s3" {
     bucket = "taikinoda-tfstate"
     key    = "ecsexec"
     region = "ap-northeast-1"
-    profile = "port"
+    profile = "admin"
   }
 }
 
 provider "github" {}
 provider "sops" {}
 
-
-resource "github_actions_secret" "secrets" {
-  for_each = nonsensitive(data.sops_file.secrets.data)
-
-  repository      = local.repo
-  secret_name     = each.key
-  plaintext_value = each.value
-}
-
-resource "github_actions_variable" "main" {
-  for_each = local.github_actions_variables
-
-  repository    = local.repo
-  variable_name = each.key
-  value         = each.value
-}
-
-data "sops_file" "secrets" {
-  source_file = "secrets.yaml"
-}
-
-locals {
-  repo = "ecsexec"
-  github_actions_variables = {
-    "APP_ID" = "872203"
-  }
+provider "aws" {
+  region = "ap-northeast-1"
+  profile = "admin"
 }
