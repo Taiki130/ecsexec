@@ -13,8 +13,8 @@ jobs:
     uses: ./.github/workflows/wc-path-filter.yaml
     permissions: {}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
 
   enable-auto-merge:
     # This job is used for main branch's branch protection rule's status check.
@@ -24,8 +24,8 @@ jobs:
       - status-check
     permissions: {}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
     if: |
       ! failure() && ! cancelled() && github.event.pull_request.user.login == 'renovate[bot]' && contains(github.event.pull_request.body, ' **Automerge**: Enabled.')
 
@@ -54,8 +54,8 @@ jobs:
     with:
       ref: ${{needs.path-filter.outputs.merge_commit_sha}}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
 
   ghalint:
     uses: ./.github/workflows/wc-ghalint.yaml
@@ -67,8 +67,8 @@ jobs:
     with:
       ref: ${{needs.path-filter.outputs.merge_commit_sha}}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
 
   hide-comment:
     uses: ./.github/workflows/wc-hide-comment.yaml
@@ -78,8 +78,8 @@ jobs:
     with:
       ref: ${{needs.path-filter.outputs.merge_commit_sha}}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
 
   opa-fmt:
     uses: ./.github/workflows/wc-opa-fmt.yaml
@@ -92,8 +92,8 @@ jobs:
     with:
       ref: ${{needs.path-filter.outputs.merge_commit_sha}}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
 
   renovate-config-validator:
     uses: ./.github/workflows/wc-renovate-config-validator.yaml
@@ -113,9 +113,8 @@ jobs:
     with:
       ref: ${{needs.path-filter.outputs.merge_commit_sha}}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
-      terraform_private_module_ssh_key: ${{secrets.TERRAFORM_PRIVATE_MODULE_SSH_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
       secrets: ${{toJSON(secrets)}}
 
   update-aqua-checksums:
@@ -127,5 +126,5 @@ jobs:
     with:
       ref: ${{needs.path-filter.outputs.merge_commit_sha}}
     secrets:
-      gh_app_id: ${{secrets.APP_ID}}
-      gh_app_private_key: ${{secrets.APP_PRIVATE_KEY}}
+      gh_app_id: ${{secrets.TFACTION_APP_ID}}
+      gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
