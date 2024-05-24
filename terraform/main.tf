@@ -10,10 +10,17 @@ terraform {
       version = "1.0.0"
     }
   }
+  backend "s3" {
+    bucket = "taikinoda-tfstate"
+    key    = "ecsexec"
+    region = "ap-northeast-1"
+    profile = "port"
+  }
 }
 
 provider "github" {}
 provider "sops" {}
+
 
 resource "github_actions_secret" "secrets" {
   for_each = nonsensitive(data.sops_file.secrets.data)
