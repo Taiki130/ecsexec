@@ -18,7 +18,6 @@ terraform {
     bucket = "taikinoda-tfstate"
     key    = "ecsexec"
     region = "ap-northeast-1"
-    profile = "admin"
   }
 }
 
@@ -27,5 +26,4 @@ provider "sops" {}
 
 provider "aws" {
   region = "ap-northeast-1"
-  profile = "admin"
 }
