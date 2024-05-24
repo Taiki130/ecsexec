@@ -30,3 +30,4 @@ packages:
   - name: suzuki-shunsuke/tfcmt@v4.9.1
   - name: minamijoyo/tfmigrate@v0.3.23
   - name: terraform-linters/tflint@v0.51.1
+  - name: FiloSottile/age@v1.1.1
