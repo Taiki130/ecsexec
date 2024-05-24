@@ -115,6 +115,7 @@ jobs:
     secrets:
       gh_app_id: ${{secrets.TFACTION_APP_ID}}
       gh_app_private_key: ${{secrets.TFACTION_APP_PRIVATE_KEY}}
+      sops_age_key: ${{secrets.SOPS_AGE_KEY}}
       secrets: ${{toJSON(secrets)}}
 
   update-aqua-checksums:
