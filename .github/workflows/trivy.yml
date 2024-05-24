@@ -17,5 +17,5 @@ jobs:
         uses: aquasecurity/trivy-action@fd25fed6972e341ff0007ddb61f77e88103953c2 # 0.21.0
         with:
           scan-type: 'config'
-          scan-ref: ./tofu/
+          scan-ref: ./terraform/
           exit-code: '1'
