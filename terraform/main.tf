@@ -30,7 +30,7 @@ provider "github" {
   app_auth {
     id              = 905964
     installation_id = 51149317
-    pem_file        = data.sops_file.tf_secrets.app_private_key
+    pem_file        = data.sops_file.tf_secrets.data.app_private_key
   }
 }
 
