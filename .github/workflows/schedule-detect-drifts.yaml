@@ -59,6 +59,8 @@ jobs:
     #     issue: ${{fromJSON(needs.pick-out-drift-issues.outputs.issues)}}
     env:
       # TFACTION_TARGET: ${{matrix.issue.target}}
+      # TFACTION_JOB_TYPE: ${{matrix.issue.job_type}}
+      TFACTION_JOB_TYPE: terraform
       TFACTION_TARGET: terraform
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
