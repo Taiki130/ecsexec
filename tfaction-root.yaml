@@ -1,4 +1,4 @@
-plan_workflow_name: terraform-plan
+plan_workflow_name: plan
 target_groups:
   - working_directory: terraform
     target: terraform
