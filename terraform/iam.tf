@@ -18,7 +18,7 @@ module "aws" {
   s3_bucket_terraform_state_name   = "taikinoda-tfstate"
 }
 
-data "aws_iam_role" "main" {
+data "aws_iam_role" "terraform" {
   for_each = toset(local.gha_iam_roles)
 
   name = "GitHubActions_Terraform_ecsexec_${each.key}"
@@ -28,7 +28,7 @@ data "aws_iam_policy" "admin" {
   name = "AdministratorAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "main" {
+resource "aws_iam_role_policy_attachment" "terraform_admin" {
   for_each = toset(local.gha_iam_roles)
 
   role       = data.aws_iam_role.main[each.key].name
