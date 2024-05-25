@@ -41,5 +41,5 @@ provider "aws" {
 }
 
 data "sops_file" "tf_secrets" {
-  source_file = "tf_secrets.yaml"
+  source_file = "sops/tf_secrets.yaml"
 }

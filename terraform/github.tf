@@ -7,7 +7,7 @@ resource "github_actions_secret" "secrets" {
 }
 
 data "sops_file" "secrets" {
-  source_file = "secrets.yaml"
+  source_file = "sops/secrets.yaml"
 }
 
 locals {
