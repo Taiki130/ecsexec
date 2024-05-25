@@ -26,10 +26,10 @@ terraform {
 }
 
 provider "github" {
-  owner = "Taiki130"
+  owner = local.owner
   app_auth {
-    id              = 905964
-    installation_id = 51149317
+    id              = local.app_id
+    installation_id = local.installation_id
     pem_file        = data.sops_file.tf_secrets.data.app_private_key
   }
 }
