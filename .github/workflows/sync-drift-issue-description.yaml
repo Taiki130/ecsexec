@@ -1,0 +1,16 @@
+name: Synchronize drift issue description
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  sync-issue:
+    runs-on: ubuntu-latest
+    if: |
+      !github.event.issue.pull_request && startsWith(github.event.issue.title, 'Terraform Drift (') && endsWith(github.event.issue.title, ')') && github.actor == 'Taiki130'
+    permissions:
+      issues: write
+    steps:
+      - uses: suzuki-shunsuke/tfaction/sync-drift-issue-description@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
