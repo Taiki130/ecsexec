@@ -13,3 +13,6 @@ target_groups:
       aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_apply
     tfmigrate_apply_config:
       aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_apply
+    secrets:
+      - env_name: SOPS_AGE_KEY
+        secret_name: sops_age_key

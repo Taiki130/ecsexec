@@ -15,6 +15,8 @@ on:
         required: false
       secrets:
         required: false
+      sops_age_key:
+        required: false
 
 env:
   TFACTION_IS_APPLY: 'false'
@@ -59,6 +61,7 @@ jobs:
     secrets:
       gh_app_id: ${{secrets.gh_app_id}}
       gh_app_private_key: ${{secrets.gh_app_private_key}}
+      sops_age_key: ${{secrets.sops_age_key}}
     permissions:
       id-token: write
       contents: read
