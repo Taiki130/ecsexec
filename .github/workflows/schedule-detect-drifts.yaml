@@ -55,6 +55,8 @@ jobs:
       fail-fast: false
       matrix:
         issue: ${{fromJSON(needs.pick-out-drift-issues.outputs.issues)}}
+    env:
+      TFACTION_TARGET: ${{matrix.issue.target}}
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - name: Generate token
@@ -77,6 +79,10 @@ jobs:
           aqua_version: v2.28.1
         env:
           GITHUB_TOKEN: ${{github.token}}
+
+      - uses: suzuki-shunsuke/tfaction/export-secrets@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
+        with:
+          secrets: ${{ toJSON(secrets) }}
 
       - uses: suzuki-shunsuke/tfaction/set-drift-env@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
         with:
