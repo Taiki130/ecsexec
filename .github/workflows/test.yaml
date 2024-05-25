@@ -1,5 +1,5 @@
 ---
-name: pull_request_target
+name: terraform-plan
 on: pull_request_target
 
 concurrency:
