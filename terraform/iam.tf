@@ -31,7 +31,7 @@ data "aws_iam_policy" "admin" {
 resource "aws_iam_role_policy_attachment" "terraform_admin" {
   for_each = toset(local.gha_iam_roles)
 
-  role       = data.aws_iam_role.main[each.key].name
+  role       = data.aws_iam_role.terraform[each.key].name
   policy_arn = data.aws_iam_policy.admin.arn
 }
 
