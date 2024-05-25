@@ -25,8 +25,11 @@ provider "registry.terraform.io/hashicorp/aws" {
   hashes = [
     "h1:14o4iDSwqoLyqrMiH9I26ZPrseVk7OMRLbnylAAus38=",
     "h1:AUyje9jt9NYDbdFJwxLYtMEodb3PZptGsftpuB0xSgQ=",
+    "h1:ESfxP2tCO6IZldSQnepXmIm+x+VtaQt/bKgGjYE+0BY=",
+    "h1:GXI6dHD8tE5+Wl8XjjgN5kXwDMmx8L7Q23TzQxJ+s2g=",
     "h1:KY/uPHIa+bHgMOAqoA2BnjIlIDuFRFwbLjLkf1gbeDk=",
     "h1:pVXr2HGb9mZ8qG7oh31mAHcTblZaPROvhPpFiivzoYw=",
+    "h1:qia6BYt1yAOIYVTRh+eH+OvrVq06fdzTtn6OnAdGHEg=",
     "h1:xJXhECzy1qvBsDO51gCt8j6vqbpMO2OCUwrXiP58Cws=",
     "zh:03d524b70ab300d90dc4dccad0c28b18d797b8986722b7a93e40a41500450eaa",
     "zh:049a4292dbf6afc2445d9fc796258ae33a989fd9a68b84f6e51c42c46dc2e45d",
