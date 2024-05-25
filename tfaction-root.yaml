@@ -7,12 +7,21 @@ target_groups:
     s3_bucket_name_tfmigrate_history: taikinoda-tfstate
     terraform_plan_config:
       aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_plan
+      secrets:
+        - env_name: SOPS_AGE_KEY
+          secret_name: sops_age_key
     tfmigrate_plan_config:
       aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_plan
+      secrets:
+        - env_name: SOPS_AGE_KEY
+          secret_name: sops_age_key
     terraform_apply_config:
       aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_apply
+      secrets:
+        - env_name: SOPS_AGE_KEY
+          secret_name: SOPS_AGE_KEY
     tfmigrate_apply_config:
       aws_assume_role_arn: arn:aws:iam::221749090623:role/GitHubActions_Terraform_ecsexec_terraform_apply
-    secrets:
-      - env_name: SOPS_AGE_KEY
-        secret_name: sops_age_key
+      secrets:
+        - env_name: SOPS_AGE_KEY
+          secret_name: SOPS_AGE_KEY

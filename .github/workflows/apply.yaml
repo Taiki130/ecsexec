@@ -135,7 +135,7 @@ jobs:
       - uses: suzuki-shunsuke/tfaction/setup@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
         with:
           github_token: ${{ steps.setup_token.outputs.token }}
-          ssh_key: ${{ secrets.TERRAFORM_PRIVATE_MODULE_SSH_KEY }} # This isn't needed if you don't use SSH key to checkout private Terraform Modules
+          # ssh_key: ${{ secrets.TERRAFORM_PRIVATE_MODULE_SSH_KEY }} # This isn't needed if you don't use SSH key to checkout private Terraform Modules
 
       - name: Generate token for apply
         id: apply_token
