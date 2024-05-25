@@ -43,25 +43,21 @@ jobs:
           GITHUB_TOKEN: ${{steps.generate_token.outputs.token}}
 
   detect-drift:
-    # name: "detect-drift (${{matrix.issue.target}})"
-    name: "detect-drift (terraform)"
-    # runs-on: ${{matrix.issue.runs_on}}
-    runs-on: ubuntu-latest
+    name: "detect-drift (${{matrix.issue.target}})"
+    runs-on: ${{matrix.issue.runs_on}}
     needs: pick-out-drift-issues
     permissions:
       issues: write # For github-comment and tfcmt
       contents: write # To push commits
       id-token: write # For OIDC
-    # if: fromJSON(needs.pick-out-drift-issues.outputs.has_issues)
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     issue: ${{fromJSON(needs.pick-out-drift-issues.outputs.issues)}}
+    if: fromJSON(needs.pick-out-drift-issues.outputs.has_issues)
+    strategy:
+      fail-fast: false
+      matrix:
+        issue: ${{fromJSON(needs.pick-out-drift-issues.outputs.issues)}}
     env:
-      # TFACTION_TARGET: ${{matrix.issue.target}}
-      # TFACTION_JOB_TYPE: ${{matrix.issue.job_type}}
-      TFACTION_JOB_TYPE: terraform
-      TFACTION_TARGET: terraform
+      TFACTION_TARGET: ${{matrix.issue.target}}
+      TFACTION_JOB_TYPE: ${{matrix.issue.job_type}}
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - name: Generate token
@@ -91,8 +87,7 @@ jobs:
 
       - uses: suzuki-shunsuke/tfaction/set-drift-env@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
         with:
-          # issue: ${{toJSON(matrix.issue)}}
-          issue: terraform
+          issue: ${{toJSON(matrix.issue)}}
 
       - uses: suzuki-shunsuke/tfaction/setup@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
         with:
