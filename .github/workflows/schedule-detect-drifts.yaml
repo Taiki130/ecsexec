@@ -11,8 +11,8 @@ jobs:
     permissions:
       contents: read
     outputs:
-      issues: ${{steps.pick-out-drift-issues.outputs.issues}}
-      has_issues: ${{steps.pick-out-drift-issues.outputs.has_issues}}
+      issues: terraform
+      has_issues: true
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
 
