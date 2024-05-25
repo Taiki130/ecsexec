@@ -25,9 +25,21 @@ terraform {
   }
 }
 
-provider "github" {}
+provider "github" {
+  owner = "Taiki130"
+  app_auth {
+    id              = 905964
+    installation_id = 51149317
+    pem_file        = data.sops_file.tf_secrets.app_private_key
+  }
+}
+
 provider "sops" {}
 
 provider "aws" {
   region = "ap-northeast-1"
+}
+
+data "sops_file" "tf_secrets" {
+  source_file = "tf_secrets.yaml"
 }
