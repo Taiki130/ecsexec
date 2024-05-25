@@ -22,10 +22,6 @@ jobs:
         env:
           AQUA_GITHUB_TOKEN: ${{github.token}}
 
-      - uses: suzuki-shunsuke/tfaction/export-secrets@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
-        with:
-          secrets: ${{ toJSON(secrets) }}
-
       - name: Generate token
         id: generate_token
         uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
@@ -81,6 +77,10 @@ jobs:
           aqua_version: v2.28.1
         env:
           GITHUB_TOKEN: ${{github.token}}
+
+      - uses: suzuki-shunsuke/tfaction/export-secrets@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
+        with:
+          secrets: ${{ toJSON(secrets) }}
 
       - uses: suzuki-shunsuke/tfaction/set-drift-env@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
         with:
