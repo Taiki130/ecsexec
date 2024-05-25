@@ -2,9 +2,9 @@ name: Create drift issues
 on:
   workflow_dispatch:
     inputs: {}
-  # schedule:
-  #   # daily
-  #   - cron: '0 0 * * *'
+  schedule:
+    # daily
+    - cron: '0 0 * * *'
 jobs:
   test:
     runs-on: ubuntu-latest
