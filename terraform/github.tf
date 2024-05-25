@@ -11,5 +11,8 @@ data "sops_file" "secrets" {
 }
 
 locals {
-  repo = "ecsexec"
+  owner           = "Taiki130"
+  repo            = "ecsexec"
+  app_id          = 905964
+  installation_id = 51149317
 }
