@@ -19,7 +19,7 @@ module "aws" {
 }
 
 data "aws_iam_role" "main" {
-  for_each = local.gha_iam_roles
+  for_each = toset(local.gha_iam_roles)
 
   name = "GitHubActions_Terraform_ecsexec_${each.key}"
 }
@@ -29,7 +29,7 @@ data "aws_iam_policy" "admin" {
 }
 
 resource "aws_iam_role_policy_attachment" "main" {
-  for_each = local.gha_iam_roles
+  for_each = toset(local.gha_iam_roles)
 
   role       = data.aws_iam_role.main[each.key].name
   policy_arn = data.aws_iam_policy.admin.arn
