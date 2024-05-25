@@ -50,7 +50,7 @@ jobs:
       issues: write # For github-comment and tfcmt
       contents: write # To push commits
       id-token: write # For OIDC
-    if: fromJSON(needs.pick-out-drift-issues.outputs.has_issues)
+    # if: fromJSON(needs.pick-out-drift-issues.outputs.has_issues)
     strategy:
       fail-fast: false
       matrix:
