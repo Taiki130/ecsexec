@@ -11,8 +11,8 @@ resource "aws_iam_openid_connect_provider" "github" {
 module "aws" {
   source = "github.com/suzuki-shunsuke/terraform-aws-tfaction?ref=v0.2.1"
 
-  name                             = "ecsexec"
-  repo                             = "Taiki130/ecsexec"
+  name                             = local.repo
+  repo                             = "${local.owner}/${local.repo}"
   main_branch                      = "main"
   s3_bucket_tfmigrate_history_name = "taikinoda-tfstate"
   s3_bucket_terraform_state_name   = "taikinoda-tfstate"
