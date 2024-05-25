@@ -104,9 +104,7 @@ jobs:
           # GitHub Repository where Drift Detection issues are hosted
           # https://suzuki-shunsuke.github.io/tfaction/docs/feature/drift-detection
           repositories: >-
-            [
-              "test-tfaction-drift-issues"
-            ]
+            ["${{github.event.repository.name}}"]
 
       - run: tfaction get-or-create-drift-issue
         shell: bash
@@ -127,10 +125,7 @@ jobs:
               "issues": "write"
             }
           repositories: >-
-            [
-              "${{github.event.repository.name}}",
-              "test-tfaction-drift-issues"
-            ]
+            ["${{github.event.repository.name}}"]
 
       - uses: suzuki-shunsuke/tfaction/setup@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
         with:
@@ -155,10 +150,7 @@ jobs:
               "issues": "write"
             }
           repositories: >-
-            [
-              "${{github.event.repository.name}}",
-              "test-tfaction-drift-issues"
-            ]
+            ["${{github.event.repository.name}}"]
 
       - uses: suzuki-shunsuke/tfaction/apply@47a3dd56265ea78f7694e8402e84d4a6d79aab1a # v1.5.1
         with:
