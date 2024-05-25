@@ -21,4 +21,4 @@ drift_detection:
   issue_repo_owner: Taiki130
   issue_repo_name: ecsexec
   num_of_issues: 1
-  # minimum_detection_interval: 1
+  minimum_detection_interval: 1
