@@ -38,6 +38,11 @@ provider "sops" {}
 
 provider "aws" {
   region = "ap-northeast-1"
+  default_tags {
+    tags = {
+      "Managed_by" = "${local.owner}/${local.repo}"
+    }
+  }
 }
 
 data "sops_file" "tf_secrets" {
