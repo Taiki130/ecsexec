@@ -12,7 +12,7 @@ registries:
 packages:
   - name: golang/go@go1.22.3
   - name: suzuki-shunsuke/ghalint@v0.2.9
-  - name: rhysd/actionlint@v1.7.0
+  - name: rhysd/actionlint@v1.7.1
   - name: aquasecurity/trivy@v0.51.4
   - name: goreleaser/goreleaser@v1.26.2
   - name: hashicorp/terraform@v1.8.4
