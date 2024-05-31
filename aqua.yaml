@@ -25,7 +25,7 @@ packages:
   - name: open-policy-agent/opa@v0.65.0
   - name: reviewdog/reviewdog@v0.17.4
   - name: koalaman/shellcheck@v0.10.0
-  - name: terraform-docs/terraform-docs@v0.17.0
+  - name: terraform-docs/terraform-docs@v0.18.0
   - name: suzuki-shunsuke/tfaction-go@v0.2.2
   - name: suzuki-shunsuke/tfcmt@v4.9.1
   - name: minamijoyo/tfmigrate@v0.3.23
