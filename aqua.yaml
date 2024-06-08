@@ -11,7 +11,7 @@ registries:
     ref: v4.191.0 # renovate: depName=aquaproj/aqua-registry
 packages:
   - name: golang/go@go1.22.4
-  - name: suzuki-shunsuke/ghalint@v0.2.10
+  - name: suzuki-shunsuke/ghalint@v0.2.11
   - name: rhysd/actionlint@v1.7.1
   - name: aquasecurity/trivy@v0.52.0
   - name: goreleaser/goreleaser@v1.26.2
