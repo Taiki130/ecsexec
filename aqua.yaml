@@ -26,7 +26,7 @@ packages:
   - name: reviewdog/reviewdog@v0.20.1
   - name: koalaman/shellcheck@v0.10.0
   - name: terraform-docs/terraform-docs@v0.18.0
-  - name: suzuki-shunsuke/tfaction-go@v0.2.2
+  - name: suzuki-shunsuke/tfaction-go@v0.2.3
   - name: suzuki-shunsuke/tfcmt@v4.11.0
   - name: minamijoyo/tfmigrate@v0.3.23
   - name: terraform-linters/tflint@v0.52.0
