@@ -9,7 +9,7 @@ resource "aws_iam_openid_connect_provider" "github" {
 }
 
 module "aws" {
-  source = "github.com/suzuki-shunsuke/terraform-aws-tfaction?ref=v0.2.1"
+  source = "github.com/suzuki-shunsuke/terraform-aws-tfaction?ref=v0.2.2"
 
   name                             = local.repo
   repo                             = "${local.owner}/${local.repo}"
