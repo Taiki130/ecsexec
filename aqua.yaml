@@ -15,7 +15,7 @@ packages:
   - name: rhysd/actionlint@v1.7.1
   - name: aquasecurity/trivy@v0.55.2
   - name: goreleaser/goreleaser@v2.3.2
-  - name: hashicorp/terraform@v1.9.5
+  - name: hashicorp/terraform@v1.9.6
   - name: suzuki-shunsuke/github-comment@v6.2.0
   - name: suzuki-shunsuke/tfprovidercheck@v1.0.0
   - name: suzuki-shunsuke/ci-info@v2.3.0
