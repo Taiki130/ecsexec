@@ -21,7 +21,7 @@ packages:
   - name: suzuki-shunsuke/ci-info@v2.3.0
   - name: open-policy-agent/conftest@v0.55.0
   - name: cli/cli@v2.58.0
-  - name: suzuki-shunsuke/ghcp@v1.15.0
+  - name: suzuki-shunsuke/ghcp@v1.16.0
   - name: open-policy-agent/opa@v0.69.0
   - name: reviewdog/reviewdog@v0.20.2
   - name: koalaman/shellcheck@v0.10.0
