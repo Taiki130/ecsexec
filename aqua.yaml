@@ -28,6 +28,6 @@ packages:
   - name: terraform-docs/terraform-docs@v0.19.0
   - name: suzuki-shunsuke/tfaction-go@v0.2.3
   - name: suzuki-shunsuke/tfcmt@v4.14.0
-  - name: minamijoyo/tfmigrate@v0.3.24
+  - name: minamijoyo/tfmigrate@v0.3.25
   - name: terraform-linters/tflint@v0.53.0
   - name: FiloSottile/age@v1.2.0
