@@ -10,7 +10,7 @@ registries:
   - type: standard
     ref: v4.248.0 # renovate: depName=aquaproj/aqua-registry
 packages:
-  - name: golang/go@go1.23.2
+  - name: golang/go@go1.23.3
   - name: suzuki-shunsuke/ghalint@v1.0.0
   - name: rhysd/actionlint@v1.7.4
   - name: aquasecurity/trivy@v0.57.0
