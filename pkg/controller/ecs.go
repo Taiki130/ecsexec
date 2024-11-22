@@ -31,14 +31,15 @@ func SelectCluster(ctx context.Context, client *ecs.Client) (string, error) {
 
 func SelectService(ctx context.Context, client *ecs.Client, cluster string) (string, error) {
 	resp, err := client.ListServices(ctx, &ecs.ListServicesInput{
-		Cluster: aws.String(cluster),
+		Cluster:    aws.String(cluster),
+		LaunchType: "FARGATE",
 	})
 	if err != nil {
 		return "", err
 	}
 	serviceArns := resp.ServiceArns
 	if len(serviceArns) == 0 {
-		return "", errors.New("no ECS task found")
+		return "", errors.New("no ECS searvice (fargate) found")
 	}
 	var serviceNames []string
 	for _, arn := range serviceArns {
