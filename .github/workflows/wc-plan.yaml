@@ -55,7 +55,7 @@ jobs:
         env:
           AQUA_GITHUB_TOKEN: ${{steps.aqua_installer_token.outputs.token}}
 
-      - uses: suzuki-shunsuke/tfaction/export-secrets@2b9d52f60b37e9331ebfe8f06df7ec2d0ee493a6 # v1.12.1
+      - uses: suzuki-shunsuke/tfaction/export-secrets@1eb11300c759d17050d0a81c3e8f1c6fa89b39d9 # v1.13.1
         with:
           # If this action doesn't export secrets as you expect, please check if secrets are passed to this action properly.
           # If you use reusable workflows, maybe secrets aren't passed to the reusable workflow.
@@ -103,13 +103,13 @@ jobs:
           repositories: >-
             ["${{github.event.repository.name}}"]
 
-      - uses: suzuki-shunsuke/tfaction/setup@2b9d52f60b37e9331ebfe8f06df7ec2d0ee493a6 # v1.12.1
+      - uses: suzuki-shunsuke/tfaction/setup@1eb11300c759d17050d0a81c3e8f1c6fa89b39d9 # v1.13.1
         with:
           github_token: ${{steps.generate_token.outputs.token}}
         env:
           GITHUB_TOKEN: ${{steps.generate_token.outputs.token}} # For GitHub Provider
 
-      - uses: suzuki-shunsuke/tfaction/get-target-config@2b9d52f60b37e9331ebfe8f06df7ec2d0ee493a6 # v1.12.1
+      - uses: suzuki-shunsuke/tfaction/get-target-config@1eb11300c759d17050d0a81c3e8f1c6fa89b39d9 # v1.13.1
         id: target-config
 
       - name: Generate token (pull request write)
@@ -139,13 +139,13 @@ jobs:
               - name: registry.terraform.io/hashicorp/tls
           GITHUB_TOKEN: ${{steps.pull_request_token.outputs.token}} # For github-comment
 
-      - uses: suzuki-shunsuke/tfaction/test@2b9d52f60b37e9331ebfe8f06df7ec2d0ee493a6 # v1.12.1
+      - uses: suzuki-shunsuke/tfaction/test@1eb11300c759d17050d0a81c3e8f1c6fa89b39d9 # v1.13.1
         with:
           github_token: ${{steps.generate_token.outputs.token}}
         env:
           GITHUB_TOKEN: ${{steps.generate_token.outputs.token}} # For GitHub Provider and reviewdog and github-comment
 
-      - uses: suzuki-shunsuke/tfaction/plan@2b9d52f60b37e9331ebfe8f06df7ec2d0ee493a6 # v1.12.1
+      - uses: suzuki-shunsuke/tfaction/plan@1eb11300c759d17050d0a81c3e8f1c6fa89b39d9 # v1.13.1
         with:
           github_token: ${{steps.generate_token.outputs.token}}
         env:
