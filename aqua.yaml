@@ -13,7 +13,7 @@ packages:
   - name: golang/go@go1.23.4
   - name: suzuki-shunsuke/ghalint@v1.1.0
   - name: rhysd/actionlint@v1.7.4
-  - name: aquasecurity/trivy@v0.58.0
+  - name: aquasecurity/trivy@v0.58.1
   - name: goreleaser/goreleaser@v2.5.0
   - name: hashicorp/terraform@v1.9.6
   - name: suzuki-shunsuke/github-comment@v6.3.0
