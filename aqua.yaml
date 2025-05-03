@@ -29,5 +29,5 @@ packages:
   - name: suzuki-shunsuke/tfaction-go@v0.2.3
   - name: suzuki-shunsuke/tfcmt@v4.14.7
   - name: minamijoyo/tfmigrate@v0.4.2
-  - name: terraform-linters/tflint@v0.56.0
+  - name: terraform-linters/tflint@v0.57.0
   - name: FiloSottile/age@v1.2.1
