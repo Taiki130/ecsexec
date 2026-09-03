@@ -24,7 +24,7 @@ packages:
   - name: suzuki-shunsuke/ghcp@v1.16.0
   - name: open-policy-agent/opa@v1.4.2
   - name: reviewdog/reviewdog@v0.20.3
-  - name: koalaman/shellcheck@v0.10.0
+  - name: koalaman/shellcheck@v0.11.0
   - name: terraform-docs/terraform-docs@v0.20.0
   - name: suzuki-shunsuke/tfaction-go@v0.2.3
   - name: suzuki-shunsuke/tfcmt@v4.14.19
