@@ -16,7 +16,7 @@ packages:
   - name: aquasecurity/trivy@v0.74.0
   - name: goreleaser/goreleaser@v2.18.0
   - name: hashicorp/terraform@v1.9.6
-  - name: suzuki-shunsuke/github-comment@v6.3.2
+  - name: suzuki-shunsuke/github-comment@v6.4.1
   - name: suzuki-shunsuke/tfprovidercheck@v1.0.7
   - name: suzuki-shunsuke/ci-info@v2.4.3
   - name: open-policy-agent/conftest@v0.69.0
